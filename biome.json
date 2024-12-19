@@ -1,0 +1,24 @@
+{
+  "extends": ["ultracite"],
+  "linter": {
+    "rules": {
+      "nursery": {
+        "noCommonJs": "off",
+        "useSortedClasses": {
+          "level": "warn",
+          "fix": "safe"
+        }
+      },
+      "style": {
+        "useFilenamingConvention": {
+          "options": {
+            "strictCase": false,
+            "requireAscii": true,
+            "filenameCases": ["kebab-case", "export"]
+          }
+        },
+        "useNamingConvention": "off"
+      }
+    }
+  }
+}
