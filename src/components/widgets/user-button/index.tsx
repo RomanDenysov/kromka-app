@@ -52,7 +52,7 @@ const UserButton = async () => {
           <DropdownMenuGroup>
             {userButtonNavigation.map((item) => (
               <DropdownMenuItem key={item.title} asChild>
-                <Link href={item.href}>
+                <Link href={`/profile/${item.href}`}>
                   <item.icon />
                   {item.title}
                 </Link>

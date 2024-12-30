@@ -20,8 +20,13 @@ const MobileNav = () => {
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" onClick={() => setIsOpen(!isOpen)}>
-          {isOpen ? <X size={24} /> : <MenuIcon size={24} />}
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setIsOpen(!isOpen)}
+          className="[&_svg]:size-6"
+        >
+          {isOpen ? <X size={24} /> : <MenuIcon size={24} className="" />}
         </Button>
       </SheetTrigger>
       <SheetContent side="left">

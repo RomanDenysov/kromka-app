@@ -11,12 +11,14 @@ const AvatarStack = ({
   name?: string
   email: string
 }) => {
+  console.log('avatar', avatar)
+
   return (
     <TooltipProvider>
       <Tooltip delayDuration={0}>
         <TooltipTrigger asChild>
           <Avatar className="size-8 bg-secondary ring-1 ring-background">
-            <AvatarImage src={avatar ?? undefined} alt={name} />
+            {avatar && <AvatarImage loading="lazy" src={avatar} alt={name} />}
             <AvatarFallback delayMs={600} className="text-xs">
               {name ? getNameInitials(name) : 'No name'}
             </AvatarFallback>

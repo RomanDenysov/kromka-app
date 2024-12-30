@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import Footer from '~/components/widgets/footer'
 import Header from '~/components/widgets/header'
 
 type Props = {
@@ -9,7 +10,8 @@ export default function Layout({ children }: Props) {
   return (
     <>
       <Header />
-      <main>{children}</main>
+      <main className="min-h-screen">{children}</main>
+      <Footer />
     </>
   )
 }

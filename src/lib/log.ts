@@ -1,4 +1,4 @@
-import { development } from '~/config/constants'
+import { isDevelopment } from '~/config/constants'
 
 type Options = {
   timestamp?: boolean
@@ -15,28 +15,28 @@ const format = (message: string, options: Options = {}): string => {
 
 export const log = {
   debug: (message: string, options?: Options) => {
-    if (!development) {
+    if (!isDevelopment) {
       return
     }
     // biome-ignore lint/suspicious/noConsole: <explanation>
     console.debug(format(message, options))
   },
   info: (message: string, options?: Options) => {
-    if (!development) {
+    if (!isDevelopment) {
       return
     }
     // biome-ignore lint/suspicious/noConsole: <explanation>
     console.info(format(message, options))
   },
   warn: (message: string, options?: Options) => {
-    if (!development) {
+    if (!isDevelopment) {
       return
     }
     // biome-ignore lint/suspicious/noConsole: <explanation>
     console.warn(format(message, options))
   },
   error: (message: string, options?: Options) => {
-    if (!development) {
+    if (!isDevelopment) {
       return
     }
     // biome-ignore lint/suspicious/noConsole: <explanation>

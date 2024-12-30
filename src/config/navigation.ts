@@ -26,7 +26,7 @@ export const mainNavigation = [
       },
       {
         title: 'Predajne',
-        href: '/stores',
+        href: '/eshop/stores',
       },
     ],
   },
@@ -40,7 +40,7 @@ export const mainNavigation = [
       },
       {
         title: 'Kontakt',
-        href: '/contact',
+        href: '/contacts',
       },
       {
         title: 'Podpora',

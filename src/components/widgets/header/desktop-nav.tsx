@@ -20,7 +20,7 @@ const DesktopNav = () => {
             <NavigationMenuItem key={item.title}>
               {item.href ? (
                 <>
-                  <NavigationMenuLink>
+                  <NavigationMenuLink href={item.href}>
                     <Button variant="ghost">{item.title}</Button>
                   </NavigationMenuLink>
                 </>

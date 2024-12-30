@@ -16,3 +16,10 @@ export async function signInWithProvider(provider: Provider) {
     },
   )
 }
+export async function logout() {
+  await authClient.signOut()
+  console.log('logged out')
+  const session = await authClient.getSession()
+  console.log(session)
+  return redirect('/')
+}

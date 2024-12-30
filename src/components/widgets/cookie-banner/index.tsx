@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { Button } from '~/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/ui/card'
+import { isDevelopment } from '~/config/constants'
 import { authClient } from '~/lib/auth-client'
 import { log } from '~/lib/log'
 import { cn } from '~/lib/utils'
@@ -16,7 +17,7 @@ export const CookieBanner = () => {
 
   const { data: user, isPending } = authClient.useSession()
 
-  if (process.env.NODE_ENV === 'development') {
+  if (isDevelopment) {
     log.debug(`USER, ${user}`, { timestamp: true, prefix: 'cookie banner' })
   }
 

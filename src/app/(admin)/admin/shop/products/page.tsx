@@ -1,5 +1,7 @@
+import { getProducts } from '~/actions/products'
 import { DataTable } from '~/components/data-table'
 import { Typography } from '~/components/typography'
+import { log } from '~/lib/log'
 import { columns } from './columns'
 
 const dummyProducts = [
@@ -35,10 +37,20 @@ const dummyProducts = [
   },
 ]
 
-export default function Page() {
+export default async function Page() {
+  const products = await getProducts()
+
+  // if (!products) {
+  //   return null
+  // }
+
+  log.debug(`Products: ${products}`)
   return (
     <>
-      <Typography variant="h3">Products</Typography>
+      <Typography variant="h3">Products ({products.length})</Typography>
+
+      {/* {products.length > 0 ? <DataTable columns={columns} data={products} /> : <div>No products</div>} */}
+
       <DataTable columns={columns} data={dummyProducts} />
     </>
   )
