@@ -16,9 +16,11 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 
-import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
+import { ChevronLeftIcon, ChevronRightIcon, PlusIcon, TrashIcon } from 'lucide-react'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { useState } from 'react'
-import { Button } from '~/components/ui/button'
+import { Button, buttonVariants } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
 import {
   Table,
@@ -28,6 +30,7 @@ import {
   TableHeader,
   TableRow,
 } from '~/components/ui/table'
+import { cn } from '~/lib/utils'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -35,6 +38,7 @@ interface DataTableProps<TData, TValue> {
   filterKey?: string
   onDelete?: (rows: Row<TData>[]) => void
   disabled?: boolean
+  canCreateNew?: boolean
 }
 
 export function DataTable<TData, TValue>({
@@ -42,11 +46,13 @@ export function DataTable<TData, TValue>({
   data,
   filterKey = 'title',
   onDelete,
+  canCreateNew = false,
   disabled = false,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
+  const pathname = usePathname()
   const table = useReactTable({
     data,
     columns,
@@ -75,16 +81,28 @@ export function DataTable<TData, TValue>({
           value={(table.getColumn(filterKey)?.getFilterValue() as string) ?? ''}
           onChange={(event) => table.getColumn(filterKey)?.setFilterValue(event.target.value)}
         />
-        {/* {table.getFilteredSelectedRowModel().rows.length > 0 && (
-          <Button
-            disabled={disabled}
-            variant="destructive"
-            onClick={() => table.resetColumnFilters()}
-          >
-            <TrashIcon size={24} />
-            Delete ({table.getFilteredSelectedRowModel().rows.length})
-          </Button>
-        )} */}
+        <div className="flex flex-row gap-3">
+          {table.getFilteredSelectedRowModel().rows.length > 0 && (
+            <Button
+              disabled={disabled}
+              variant="destructive"
+              size="sm"
+              onClick={() => table.resetColumnFilters()}
+            >
+              <TrashIcon size={24} />
+              Delete ({table.getFilteredSelectedRowModel().rows.length})
+            </Button>
+          )}
+          {canCreateNew && (
+            <Link
+              href={`${pathname}/new`}
+              className={cn(buttonVariants({ variant: 'outline', size: 'sm' }))}
+            >
+              <PlusIcon size={24} />
+              Add new
+            </Link>
+          )}
+        </div>
       </div>
       <div className="rounded-md border">
         <Table>

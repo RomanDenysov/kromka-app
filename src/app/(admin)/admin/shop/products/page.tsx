@@ -51,7 +51,7 @@ export default async function Page() {
 
       {/* {products.length > 0 ? <DataTable columns={columns} data={products} /> : <div>No products</div>} */}
 
-      <DataTable columns={columns} data={dummyProducts} />
+      <DataTable columns={columns} data={dummyProducts} canCreateNew />
     </>
   )
 }

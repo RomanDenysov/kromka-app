@@ -47,13 +47,13 @@ export const Features = () => {
           <div className="flex flex-col">
             <Balancer className="space-y-2">
               <Typography variant="h3" className="text-left font-bold text-4xl">
-                Something new!
+                Čo pre vás pečieme
               </Typography>
               <Typography
                 variant="p"
                 className="max-w-xl text-left text-lg text-muted-foreground leading-relaxed tracking-tight md:text-xl"
               >
-                Managing a small business today is already tough.
+                Vytvorte si svoje Kromka konto a objavte všetky naše chutné produkty
               </Typography>
             </Balancer>
           </div>
@@ -61,16 +61,16 @@ export const Features = () => {
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
           <FeatureItem
             href="#"
-            title="Customers"
-            description="Lorem ipsum dolor sit amet."
+            title="Kváskový chlieb"
+            description="Domáci chlieb upečený s láskou a na kvase"
             className="lg:col-span-2 lg:aspect-auto"
           />
-          <FeatureItem href="#" title="Employees" description="Lorem ipsum dolor sit amet." />
-          <FeatureItem href="#" title="Products" description="Lorem ipsum dolor sit amet." />
+          <FeatureItem href="#" title="Koláče" description="Sladké dobroty pre každú príležitosť" />
+          <FeatureItem href="#" title="Káva" description="Výberová káva z lokálnej pražiarne" />
           <FeatureItem
             href="#"
-            title="Orders"
-            description="Lorem ipsum dolor sit amet."
+            title="Lakocinky"
+            description="Starostlivo vybrané produkty od našich partnerov"
             className="lg:col-span-2 lg:aspect-auto"
           />
         </div>

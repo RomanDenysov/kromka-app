@@ -11,23 +11,24 @@ export const CtaBanner = () => {
     <article className="pt-10 pb-20 md:pt-20 md:pb-40">
       <div className="flex flex-col items-center gap-8 rounded-md bg-muted p-4 text-center lg:p-14">
         <div>
-          <Badge>Get started</Badge>
+          <Badge>Poďme do toho spolu</Badge>
         </div>
 
         <Balancer className="flex flex-col gap-2">
-          <Typography variant="h3">Try our platform today!</Typography>
+          <Typography variant="h3">
+            Radi sa spájame s tými, ktorí majú na jedlo podobný pohľad
+          </Typography>
           <Typography variant="p">
-            Managing a small business today is already tough. Avoid further complications by
-            ditching outdated, tedious trade methods. Our goal is to streamline SMB trade, making it
-            easier and faster than ever.
+            Pečieme kváskový chlieb, koláče, ponúkame dobrú kávu, a do našich predajní vyberáme samé
+            lakocinky. Nájdete nás v Prešove aj v Košiciach, zastavte sa!
           </Typography>
         </Balancer>
         <div className="flex flex-col-reverse gap-4 px-2 sm:flex-row sm:px-0">
           <Link href="#" className={cn(buttonVariants({ variant: 'outline' }))}>
-            Jump on a call <PhoneCallIcon className="h-4 w-4" />
+            Kontaktovať nás <PhoneCallIcon className="h-4 w-4" />
           </Link>
           <Link href="#" className={cn(buttonVariants({}))}>
-            Sign up here <MoveRightIcon className="h-4 w-4" />
+            Napíšte nám <MoveRightIcon className="h-4 w-4" />
           </Link>
         </div>
       </div>

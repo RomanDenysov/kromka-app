@@ -175,8 +175,8 @@ export const storeMembers = pgTable(
 
 export const inventoryStatus = pgEnum('inventoryStatus', ['inStock', 'discontinued', 'soldOut'])
 
-export const storeInventory = pgTable(
-  'storeInventory',
+export const inventory = pgTable(
+  'inventory',
   {
     id: text('id').primaryKey(),
     storeId: text('storeId')
@@ -284,15 +284,31 @@ export const productsRelations = relations(products, ({ many, one }) => ({
     fields: [products.category],
     references: [categories.id],
   }),
+  productIngredients: many(productIngredients),
 }))
 
-export const storeInventoryRelations = relations(storeInventory, ({ one }) => ({
+export const productIngredientsRelations = relations(productIngredients, ({ one }) => ({
+  product: one(products, {
+    fields: [productIngredients.productId],
+    references: [products.id],
+  }),
+  ingredient: one(ingredients, {
+    fields: [productIngredients.ingredientId],
+    references: [ingredients.id],
+  }),
+}))
+
+export const ingredientsRelations = relations(ingredients, ({ many }) => ({
+  productIngredients: many(productIngredients),
+}))
+
+export const inventoryRelations = relations(inventory, ({ one }) => ({
   store: one(stores, {
-    fields: [storeInventory.storeId],
+    fields: [inventory.storeId],
     references: [stores.id],
   }),
   option: one(productOptions, {
-    fields: [storeInventory.productOptionsSku],
+    fields: [inventory.productOptionsSku],
     references: [productOptions.sku],
   }),
 }))
@@ -302,7 +318,7 @@ export const productOptionsRelations = relations(productOptions, ({ many, one })
     fields: [productOptions.productId],
     references: [products.id],
   }),
-  inventory: many(storeInventory),
+  inventory: many(inventory),
 }))
 
 // CATEGORIES SCHEMA

@@ -50,7 +50,7 @@ export default function Page() {
   return (
     <>
       <Typography variant="h3">Stores</Typography>
-      <DataTable columns={columns} data={dummyStores} />
+      <DataTable columns={columns} data={dummyStores} canCreateNew />
     </>
   )
 }
