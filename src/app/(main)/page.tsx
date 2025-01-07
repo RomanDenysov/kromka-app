@@ -10,6 +10,10 @@ export default async function Home() {
   return (
     <Container>
       <Hero />
+      {/* <FeaturedPosts /> */}
+      {/* <Suspense>
+        <FeaturedProducts />
+      </Suspense> */}
       <Features />
       <CtaBanner />
     </Container>

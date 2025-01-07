@@ -3,27 +3,46 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useFieldArray, useForm } from 'react-hook-form'
 
+import { useCallback, useEffect, useMemo } from 'react'
 import { createProductSchema, updateProductSchema } from '~/server/api/routers/products/validator'
-import type { CreateProductInput, Product } from '../types'
+import type { Product } from '../types'
 
 export const useProductForm = (product?: Product) => {
   const validationSchema = product ? updateProductSchema : createProductSchema
 
-  const form = useForm<CreateProductInput>({
+  const defaultValues = useMemo(
+    () =>
+      product
+        ? {
+            name: product.name,
+            slug: product.slug,
+            description: product.description,
+            categoryId: product.category.id,
+            isVisible: product.isVisible,
+            sortOrder: product.sortOrder,
+            status: product.status ?? ('draft' as const),
+            options: product.options,
+            ingredients: product.ingredients,
+          }
+        : {
+            name: '',
+            slug: '',
+            description: '',
+            categoryId: '',
+            isVisible: true,
+            status: 'draft' as const,
+            sortOrder: 0,
+            options: [],
+            ingredients: [],
+          },
+    [product], // зависимость только от product
+  )
+
+  const form = useForm<typeof validationSchema._type>({
     resolver: zodResolver(validationSchema),
-    defaultValues: {
-      name: product?.name || '',
-      slug: product?.slug || '',
-      description: product?.description || '',
-      categoryId: product?.category?.id || '',
-      isVisible: product?.isVisible ?? true,
-      sortOrder: product?.sortOrder ?? 0,
-      options: product?.options || [],
-      ingredients:
-        product?.ingredients?.map((ing) => ({
-          id: ing.id || '',
-        })) || [],
-    },
+    defaultValues,
+    mode: 'onChange', // Добавляем это
+    delayError: 500,
   })
 
   const ingredientsArray = useFieldArray({
@@ -33,13 +52,24 @@ export const useProductForm = (product?: Product) => {
 
   const addIngredient = () => {
     ingredientsArray.append({
-      id: '',
+      name: '',
     })
   }
+
+  const onReset = useCallback(() => {
+    form.reset(defaultValues)
+  }, [form.reset, defaultValues])
+
+  useEffect(() => {
+    if (product) {
+      form.reset(defaultValues)
+    }
+  }, [product, form.reset, defaultValues])
 
   return {
     form,
     ingredientsArray,
     addIngredient,
+    onReset,
   }
 }

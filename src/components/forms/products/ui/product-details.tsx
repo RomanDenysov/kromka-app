@@ -13,8 +13,8 @@ import { Skeleton } from '~/components/ui/skeleton'
 import { Textarea } from '~/components/ui/textarea'
 import { slugGenerator } from '~/lib/slug-generator'
 
-import { IngredientsSelector } from './ingredients-selector'
 import type { CreateProductInput } from '../types'
+import { IngredientsSelector } from './ingredients-selector'
 
 const ProductDetails = () => {
   const form = useFormContext<CreateProductInput>()
@@ -105,7 +105,7 @@ const ProductDetails = () => {
                 <FormLabel>Ingredients</FormLabel>
                 <FormControl>
                   <IngredientsSelector
-                    value={field.value.map((ing) => ing.id)}
+                    value={field.value.map((ing) => ing.name)}
                     onChange={(newValue) => {
                       field.onChange(newValue.map((id) => ({ id })))
                     }}

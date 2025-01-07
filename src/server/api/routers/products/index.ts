@@ -81,15 +81,22 @@ export const productsRouter = createTRPCRouter({
       const [product] = await tx
         .insert(products)
         .values({
-          id: createId(), // генерация уникального id
+          id: createId(),
           name: input.name,
           slug: input.slug,
           description: input.description,
           category: input.categoryId,
+          status: input.status,
           isVisible: input.isVisible,
           sortOrder: input.sortOrder,
         })
         .returning()
+      if (!product || !product.id) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Failed to create product',
+        })
+      }
 
       // Создаем опции продукта
       if (input.options.length) {
@@ -107,13 +114,13 @@ export const productsRouter = createTRPCRouter({
         )
       }
 
-      // Связываем ингредиенты
-      if (input.ingredients.length) {
+      // Создаем ингредиенты
+      if (input.ingredients?.length) {
         await tx.insert(productIngredients).values(
           input.ingredients.map((ing) => ({
             id: createId(),
             productId: product.id,
-            ingredientId: ing.id,
+            ingredientName: ing.name,
           })),
         )
       }
@@ -149,9 +156,8 @@ export const productsRouter = createTRPCRouter({
 
   update: publicProcedure.input(updateProductSchema).mutation(async ({ input, ctx }) => {
     return await ctx.db.transaction(async (tx) => {
-      // Обновляем основные данные продукта
+      console.log('Update product', input)
       if (Object.keys(input).length > 1) {
-        // если есть что обновлять кроме id
         await tx
           .update(products)
           .set({
@@ -159,12 +165,12 @@ export const productsRouter = createTRPCRouter({
             slug: input.slug,
             description: input.description,
             category: input.categoryId,
+            status: input.status ?? 'draft',
             isVisible: input.isVisible,
-            sortOrder: input.sortOrder,
+            sortOrder: input.sortOrder ?? 0,
           })
           .where(eq(products.id, input.id))
       }
-
       // Обновляем опции если они предоставлены
       if (input.options?.length) {
         // Удаляем старые опции
@@ -193,9 +199,9 @@ export const productsRouter = createTRPCRouter({
         // Создаем новые
         await tx.insert(productIngredients).values(
           input.ingredients.map((ing) => ({
-            id: createId(),
+            id: createId(), // добавляем id, который мы забыли
             productId: input.id,
-            ingredientId: ing.id,
+            ingredientName: ing.name, // используем name вместо id
           })),
         )
       }

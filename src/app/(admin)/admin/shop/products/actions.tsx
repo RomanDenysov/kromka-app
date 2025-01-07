@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from '~/components/ui/dropdown-menu'
 
-export const Actions = ({ slug }: { slug: string }) => {
+export const Actions = ({ id }: { id: string }) => {
   const handleDelete = async () => {
     console.log('Delete product')
   }
@@ -24,7 +24,7 @@ export const Actions = ({ slug }: { slug: string }) => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <Link href={`/admin/shop/products/${slug}`}>
+        <Link href={`/admin/shop/products/${id}`}>
           <DropdownMenuItem disabled={isPending}>
             <EditIcon className="mr-2 size-4" />
             Edit

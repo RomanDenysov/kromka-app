@@ -21,6 +21,7 @@ export const sanitizeProduct = (
     id: product.category.id,
     name: product.category.name,
   },
+  status: product.status ?? 'draft',
   sortOrder: product.sortOrder ?? 0,
   isVisible: product.isVisible ?? true,
   options: product.options.map((option) => ({
@@ -34,11 +35,10 @@ export const sanitizeProduct = (
     inventory: option.inventory.map((inv) => ({
       storeId: inv.storeId,
       quantity: inv.quantity ?? 0,
-      status: inv.status,
+      status: inv.status ?? 'inStock',
     })),
   })),
   ingredients: product.productIngredients.map(({ ingredient }) => ({
-    id: ingredient.id,
     name: ingredient.name,
   })),
 })

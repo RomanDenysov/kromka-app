@@ -45,9 +45,9 @@ export const columns: ColumnDef<ProductInternal>[] = [
       return (
         <div className="relative aspect-square size-16 rounded ring-1 ring-primary-foreground">
           <Image
-            src={image}
+            src={image ?? '/placeholder.png'}
             alt="Product image"
-            className="absolute inset-0 object-cover object-center"
+            className="absolute inset-0 rounded object-cover object-center"
             fill
           />
         </div>
@@ -83,6 +83,6 @@ export const columns: ColumnDef<ProductInternal>[] = [
   },
   {
     id: 'actions',
-    cell: ({ row }) => <Actions slug={row.original.slug} />,
+    cell: ({ row }) => <Actions id={row.original.id} />,
   },
 ]

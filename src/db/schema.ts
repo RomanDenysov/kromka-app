@@ -173,7 +173,7 @@ export const storeMembers = pgTable(
   },
 )
 
-export const inventoryStatus = pgEnum('inventoryStatus', ['inStock', 'discontinued', 'soldOut'])
+export const inventoryStatus = pgEnum('inventoryStatus', ['inStock', 'soldOut'])
 
 export const inventory = pgTable(
   'inventory',
@@ -182,14 +182,14 @@ export const inventory = pgTable(
     storeId: text('storeId')
       .notNull()
       .references(() => stores.id, { onDelete: 'cascade' }),
-    productId: text('productId') // Связь с продуктом
+    productId: text('productId')
       .notNull()
       .references(() => products.id, { onDelete: 'cascade' }),
-    productOptionsSku: text('productOptionsSku') // Связь с опцией
+    productOptionsSku: text('productOptionsSku')
       .notNull()
       .references(() => productOptions.sku, { onDelete: 'cascade' }),
     quantity: integer('quantity'),
-    status: inventoryStatus('status').notNull().default('inStock'),
+    status: inventoryStatus('inventoryStatus').notNull().default('inStock'),
     updatedAt: timestamp('createdAt').defaultNow(),
   },
   (table) => ({
@@ -201,6 +201,7 @@ export const inventory = pgTable(
 )
 
 // PRODUCTS SCHEMAS
+export const productStatus = pgEnum('productStatus', ['draft', 'active', 'discontinued', 'sold'])
 
 export const products = pgTable('products', {
   id: text('id').primaryKey(),
@@ -214,6 +215,8 @@ export const products = pgTable('products', {
     .notNull()
     .references(() => categories.id, { onDelete: 'restrict' }),
 
+  status: productStatus('status').default('draft'),
+
   sortOrder: integer('sortOrder').default(0),
 
   isVisible: boolean('isVisible').default(true),
@@ -226,8 +229,7 @@ export const products = pgTable('products', {
 })
 
 export const ingredients = pgTable('ingredients', {
-  id: text('id').primaryKey(),
-  name: text('name').notNull().unique(),
+  name: text('name').primaryKey().notNull(),
 })
 
 export const productIngredients = pgTable(
@@ -237,14 +239,14 @@ export const productIngredients = pgTable(
     productId: text('productId')
       .notNull()
       .references(() => products.id, { onDelete: 'cascade' }),
-    ingredientId: text('ingredientId')
+    ingredientName: text('ingredientName')
       .notNull()
-      .references(() => ingredients.id),
+      .references(() => ingredients.name), // Теперь ссылаемся на name вместо id
   },
   (table) => ({
     productIngredientsIdx: uniqueIndex('product_ingredients_idx').on(
       table.productId,
-      table.ingredientId,
+      table.ingredientName,
     ),
   }),
 )
@@ -285,6 +287,7 @@ export const productsRelations = relations(products, ({ many, one }) => ({
     references: [categories.id],
   }),
   productIngredients: many(productIngredients),
+  images: many(productImages),
 }))
 
 export const productIngredientsRelations = relations(productIngredients, ({ one }) => ({
@@ -293,8 +296,8 @@ export const productIngredientsRelations = relations(productIngredients, ({ one 
     references: [products.id],
   }),
   ingredient: one(ingredients, {
-    fields: [productIngredients.ingredientId],
-    references: [ingredients.id],
+    fields: [productIngredients.ingredientName],
+    references: [ingredients.name],
   }),
 }))
 
@@ -311,6 +314,17 @@ export const inventoryRelations = relations(inventory, ({ one }) => ({
     fields: [inventory.productOptionsSku],
     references: [productOptions.sku],
   }),
+}))
+
+// Relations для stores
+export const storesRelations = relations(stores, ({ one, many }) => ({
+  image: one(storeImage, {
+    fields: [stores.id],
+    references: [storeImage.storeId],
+  }),
+  members: many(storeMembers),
+  inventory: many(inventory),
+  orders: many(orders),
 }))
 
 export const productOptionsRelations = relations(productOptions, ({ many, one }) => ({
@@ -348,6 +362,15 @@ export const categories = pgTable(
     }
   },
 )
+
+// Relations для категорий
+export const categoriesRelations = relations(categories, ({ one, many }) => ({
+  image: one(categoryImage, {
+    fields: [categories.id],
+    references: [categoryImage.categoryId],
+  }),
+  products: many(products),
+}))
 
 // ORDERS SCHEMA
 export const orderStatuses = pgEnum('orderStatus', [
@@ -514,5 +537,106 @@ export const orderItemsRelations = relations(orderItems, ({ one }) => ({
   option: one(productOptions, {
     fields: [orderItems.productOptionsSku],
     references: [productOptions.sku],
+  }),
+}))
+
+export const images = pgTable('images', {
+  id: text('id').primaryKey(),
+  name: text('name').notNull(),
+  url: text('url').notNull(),
+  key: text('key').notNull().unique(), // ключ в MinIO
+  size: integer('size').notNull(),
+  mimeType: text('mimeType').notNull(),
+  width: integer('width'),
+  height: integer('height'),
+  uploadedById: text('uploadedById')
+    .notNull()
+    .references(() => users.id),
+  createdAt: timestamp('createdAt').defaultNow(),
+})
+
+// Изображения для продуктов
+export const productImages = pgTable(
+  'productImages',
+  {
+    id: text('id').primaryKey(),
+    productId: text('productId')
+      .notNull()
+      .references(() => products.id, { onDelete: 'set null' }),
+    imageId: text('imageId')
+      .notNull()
+      .references(() => images.id),
+    isDefault: boolean('isDefault').default(false),
+    sortOrder: integer('sortOrder').default(0),
+    createdAt: timestamp('createdAt').defaultNow(),
+  },
+  (table) => ({
+    // Убедимся что у продукта может быть только одно дефолтное изображение
+    defaultImageIdx: uniqueIndex('product_default_image_idx')
+      .on(table.productId)
+      .where(sql`${table.isDefault} = true`),
+  }),
+)
+
+// Изображение для категории (одно изображение)
+export const categoryImage = pgTable('categoryImage', {
+  categoryId: text('categoryId')
+    .primaryKey()
+    .references(() => categories.id, { onDelete: 'set null' }),
+  imageId: text('imageId')
+    .notNull()
+    .references(() => images.id),
+  createdAt: timestamp('createdAt').defaultNow(),
+})
+
+// Изображение для магазина (одно изображение)
+export const storeImage = pgTable('storeImage', {
+  storeId: text('storeId')
+    .primaryKey()
+    .references(() => stores.id, { onDelete: 'set null' }),
+  imageId: text('imageId')
+    .notNull()
+    .references(() => images.id),
+  createdAt: timestamp('createdAt').defaultNow(),
+})
+
+// Relations
+export const imagesRelations = relations(images, ({ one }) => ({
+  uploader: one(users, {
+    fields: [images.uploadedById],
+    references: [users.id],
+  }),
+}))
+
+export const productImagesRelations = relations(productImages, ({ one }) => ({
+  product: one(products, {
+    fields: [productImages.productId],
+    references: [products.id],
+  }),
+  image: one(images, {
+    fields: [productImages.imageId],
+    references: [images.id],
+  }),
+}))
+
+export const categoryImageRelations = relations(categoryImage, ({ one }) => ({
+  category: one(categories, {
+    fields: [categoryImage.categoryId],
+    references: [categories.id],
+  }),
+  image: one(images, {
+    fields: [categoryImage.imageId],
+    references: [images.id],
+  }),
+}))
+
+export const storeImageRelations = relations(storeImage, ({ one }) => ({
+  store: one(stores, {
+    fields: [storeImage.storeId],
+    references: [stores.id],
+  }),
+  image: one(images, {
+    fields: [storeImage.imageId],
+    references: [images.id],
   }),
 }))

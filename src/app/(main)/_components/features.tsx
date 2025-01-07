@@ -47,7 +47,7 @@ export const Features = () => {
           <div className="flex flex-col">
             <Balancer className="space-y-2">
               <Typography variant="h3" className="text-left font-bold text-4xl">
-                Čo pre vás pečieme
+                Čo pre vás mame
               </Typography>
               <Typography
                 variant="p"
@@ -60,17 +60,25 @@ export const Features = () => {
         </div>
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
           <FeatureItem
-            href="#"
-            title="Kváskový chlieb"
-            description="Domáci chlieb upečený s láskou a na kvase"
+            href="/obchod"
+            title="E-shop"
+            description="Prehliadajte si náš široký sortiment produktov online"
             className="lg:col-span-2 lg:aspect-auto"
           />
-          <FeatureItem href="#" title="Koláče" description="Sladké dobroty pre každú príležitosť" />
-          <FeatureItem href="#" title="Káva" description="Výberová káva z lokálnej pražiarne" />
           <FeatureItem
-            href="#"
-            title="Lakocinky"
-            description="Starostlivo vybrané produkty od našich partnerov"
+            href="/blog"
+            title="Blog"
+            description="Články, novinky a zaujímavosti zo sveta pekárstva"
+          />
+          <FeatureItem
+            href="/b2b"
+            title="B2B Riešenia"
+            description="Špeciálne ponuky a služby pre firmy a podnikateľov"
+          />
+          <FeatureItem
+            href="/spolupraca"
+            title="Spolupráca"
+            description="Staňte sa naším obchodným partnerom alebo dodávateľom"
             className="lg:col-span-2 lg:aspect-auto"
           />
         </div>

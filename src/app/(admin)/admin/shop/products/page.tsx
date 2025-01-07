@@ -49,9 +49,13 @@ export default async function Page() {
     <>
       <Typography variant="h3">Products ({products.length})</Typography>
 
-      {/* {products.length > 0 ? <DataTable columns={columns} data={products} /> : <div>No products</div>} */}
+      {products.length > 0 ? (
+        <DataTable columns={columns} data={products} canCreateNew />
+      ) : (
+        <div>No products</div>
+      )}
 
-      <DataTable columns={columns} data={dummyProducts} canCreateNew />
+      {/* <DataTable columns={columns} data={dummyProducts} canCreateNew /> */}
     </>
   )
 }

@@ -1,4 +1,5 @@
 'use client'
+
 import { Typography } from '~/components/typography'
 import { Badge } from '~/components/ui/badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/components/ui/card'
@@ -12,44 +13,44 @@ import {
 } from '~/components/ui/form'
 import { Switch } from '~/components/ui/switch'
 
-import { Suspense } from 'react'
+import { Suspense, memo } from 'react'
 import { BackButton } from '~/components/back-button'
 import { FormActionButtons } from '~/components/form-action-buttons'
 import { LoadingSpinner } from '~/components/loading-spinner'
 import { useProductOperations } from '../api/use-product-operations'
 import { useProductForm } from '../hooks/use-product-form'
+import type { Product } from '../types'
 import { CategorySelector } from './category-selector'
 import { ProductDetails, ProductDetailsSkeleton } from './product-details'
 import { ProductOptions, ProductOptionsSkeleton } from './product-options'
 
+const ProductTitle = memo(({ product }: { product?: Product }) => (
+  <div className="flex w-full items-center justify-start gap-4">
+    <BackButton />
+    <Typography variant="h3" className="truncate">
+      {product?.name || 'New Product'}
+    </Typography>
+    {product && (
+      <Badge variant="outline" className="hidden bg-card md:inline-flex">
+        in stock
+      </Badge>
+    )}
+  </div>
+))
+
 const ProductForm = ({ productId }: { productId?: string }) => {
   const { product, isLoading, handleSubmit } = useProductOperations(productId)
-  const { form, ingredientsArray, addIngredient } = useProductForm(product)
+  const { form, ingredientsArray, addIngredient, onReset } = useProductForm(product)
 
-  if (productId && isLoading) {
+  if (isLoading) {
     return <LoadingSpinner />
   }
 
   return (
     <div className="space-y-4 md:space-y-8">
       <div className="flex items-center justify-between gap-4 md:gap-8">
-        <div className="flex w-full items-center justify-start gap-4">
-          <BackButton />
-
-          {/* Product Title if have product */}
-
-          <Typography variant="h3" className="truncate">
-            {product?.name || 'New Product'}
-          </Typography>
-
-          {product && (
-            <Badge variant="outline" className="hidden bg-card md:inline-flex">
-              in stock
-            </Badge>
-          )}
-        </div>
-
-        <FormActionButtons isLoading={isLoading} discard={form.reset} form="product-form" />
+        <ProductTitle product={product} />
+        <FormActionButtons isLoading={isLoading} discard={onReset} form="product-form" />
       </div>
 
       <Form {...form}>
@@ -69,7 +70,7 @@ const ProductForm = ({ productId }: { productId?: string }) => {
             </Suspense>
           </div>
 
-          <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
+          <aside className="grid auto-rows-max items-start gap-4 lg:gap-8">
             <Card>
               <CardHeader>
                 <CardTitle>Product Category</CardTitle>
@@ -111,7 +112,7 @@ const ProductForm = ({ productId }: { productId?: string }) => {
                 />
               </CardContent>
             </Card>
-          </div>
+          </aside>
         </form>
       </Form>
     </div>

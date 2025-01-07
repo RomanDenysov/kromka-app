@@ -1,18 +1,13 @@
-import { getCategories } from '~/actions/categories'
-import { getProducts } from '~/actions/products'
-import { getStores } from '~/actions/stores'
 import { ProductForm } from '~/components/forms/products/ui/product-form'
 
-export default async function Page() {
-  const [products, stores, categories] = await Promise.all([
-    getProducts(),
-    getStores(),
-    getCategories(),
-  ])
+export default async function Page(props: { params: Promise<{ product: string }> }) {
+  const productId = decodeURIComponent((await props.params).product)
+
+  console.log('product', productId)
 
   return (
     <div>
-      <ProductForm />
+      <ProductForm productId={productId} />
 
       {/* <Upload /> */}
     </div>

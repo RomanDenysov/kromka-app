@@ -8,7 +8,7 @@ export const BackButton = () => {
   const router = useRouter()
 
   return (
-    <Button variant="outline" onClick={() => router.back()} size="icon">
+    <Button type="button" variant="outline" onClick={() => router.back()} size="icon">
       <span className="sr-only">Back</span>
       <ChevronLeftIcon size={24} className="text-muted-foreground" />
     </Button>
