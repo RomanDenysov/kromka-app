@@ -1,8 +1,8 @@
 import { createId } from '@paralleldrive/cuid2'
 import { eq } from 'drizzle-orm'
 import { z } from 'zod'
-import { ingredients } from '~/db/schema'
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '~/server/api/trpc'
+import { ingredients } from '~/server/db/schema'
 
 export const ingredientsRouter = createTRPCRouter({
   getAll: publicProcedure.query(async ({ ctx }) => {
@@ -21,6 +21,6 @@ export const ingredientsRouter = createTRPCRouter({
   delete: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      return await ctx.db.delete(ingredients).where(eq(ingredients.id, input.id))
+      return await ctx.db.delete(ingredients).where(eq(ingredients.name, input.id))
     }),
 })

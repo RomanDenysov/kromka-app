@@ -1,9 +1,9 @@
-'use client'
+'use client';
 
-import { ChevronRightIcon, MenuIcon, X } from 'lucide-react'
-import Link from 'next/link'
-import { useState } from 'react'
-import { Button } from '~/components/ui/button'
+import { ChevronRightIcon, MenuIcon, X } from 'lucide-react';
+import Link from 'next/link';
+import { useState } from 'react';
+import { Button } from '~/components/ui/button';
 import {
   Sheet,
   SheetContent,
@@ -11,11 +11,11 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from '~/components/ui/sheet'
-import { mainNavigation } from '~/config/navigation'
+} from '~/components/ui/sheet';
+import { mainNavigation } from '~/config/navigation';
 
 const MobileNav = () => {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -59,7 +59,7 @@ const MobileNav = () => {
         </div>
       </SheetContent>
     </Sheet>
-  )
-}
+  );
+};
 
-export default MobileNav
+export default MobileNav;

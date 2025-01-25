@@ -1,8 +1,12 @@
-import { LockIcon, Settings2Icon, ShoppingBagIcon, UserIcon } from 'lucide-react'
-import Link from 'next/link'
-import { Suspense } from 'react'
-import { getUser, isAdmin } from '~/actions/user'
-import { AvatarStack } from '~/components/avatar-stack'
+import {
+  LockIcon,
+  Settings2Icon,
+  ShoppingBagIcon,
+  UserIcon,
+} from 'lucide-react';
+import Link from 'next/link';
+import { Suspense } from 'react';
+import { AvatarStack } from '~/components/avatar-stack';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,8 +15,10 @@ import {
   DropdownMenuPortal,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '~/components/ui/dropdown-menu'
-import { SignOutButton } from './sign-out-button'
+} from '~/components/ui/dropdown-menu';
+import { log } from '~/lib/utils/log';
+import { api } from '~/trpc/server';
+import { SignOutButton } from './sign-out-button';
 
 const userButtonNavigation = [
   {
@@ -30,22 +36,29 @@ const userButtonNavigation = [
     href: '/settings',
     icon: Settings2Icon,
   },
-]
+];
 
 const UserButton = async () => {
-  const user = await getUser()
-  const admin = await isAdmin()
-
+  const [user, hasAccess] = await Promise.all([
+    api.users.getUser(),
+    api.users.checkAccess(),
+  ]);
   if (!user) {
-    return null
+    return null;
   }
 
-  console.log('USER, user-button', user)
+  log.info('USER, user-button', user);
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="size-fit rounded-full focus:hidden">
-        <AvatarStack avatar={user.image} name={user.name} email={user.email} />
+        <Suspense>
+          <AvatarStack
+            avatar={user.image}
+            name={user.name}
+            email={user.email}
+          />
+        </Suspense>
       </DropdownMenuTrigger>
       <DropdownMenuPortal>
         <DropdownMenuContent align="end" sideOffset={5}>
@@ -58,14 +71,16 @@ const UserButton = async () => {
                 </Link>
               </DropdownMenuItem>
             ))}
-            {admin && <DropdownMenuSeparator />}
-            {admin && (
-              <DropdownMenuItem asChild>
-                <Link href="/admin">
-                  <LockIcon />
-                  Admin
-                </Link>
-              </DropdownMenuItem>
+            {hasAccess && (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href="/admin">
+                    <LockIcon />
+                    Admin
+                  </Link>
+                </DropdownMenuItem>
+              </>
             )}
             <DropdownMenuSeparator />
             <Suspense>
@@ -75,7 +90,7 @@ const UserButton = async () => {
         </DropdownMenuContent>
       </DropdownMenuPortal>
     </DropdownMenu>
-  )
-}
+  );
+};
 
-export { UserButton }
+export { UserButton };

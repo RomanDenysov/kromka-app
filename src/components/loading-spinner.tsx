@@ -1,4 +1,4 @@
-import { type VariantProps, cva } from 'class-variance-authority'
+import { type VariantProps, cva } from 'class-variance-authority';
 
 const spinnerVariants = cva(
   'border-4 rounded-full border-neutral-200 border-t-neutral-700 animate-spin duration-700',
@@ -13,11 +13,11 @@ const spinnerVariants = cva(
     defaultVariants: {
       size: 'md',
     },
-  },
-)
+  }
+);
 
 interface LoadingSpinnerProps extends VariantProps<typeof spinnerVariants> {
-  className?: string
+  className?: string;
 }
 
 export const LoadingSpinner = ({ size, className }: LoadingSpinnerProps) => {
@@ -25,5 +25,5 @@ export const LoadingSpinner = ({ size, className }: LoadingSpinnerProps) => {
     <div className="flex items-center justify-center">
       <div className={spinnerVariants({ size, className })} />
     </div>
-  )
-}
+  );
+};

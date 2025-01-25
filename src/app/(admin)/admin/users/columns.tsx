@@ -5,7 +5,7 @@ import { ArrowUpDownIcon } from 'lucide-react'
 import { AvatarStack } from '~/components/avatar-stack'
 import { Button } from '~/components/ui/button'
 import { Checkbox } from '~/components/ui/checkbox'
-import type { User } from '~/types/user'
+import type { User } from '~/server/types/user'
 
 export const columns: ColumnDef<User>[] = [
   {

@@ -1,5 +1,5 @@
-import { ChevronRightIcon } from 'lucide-react'
-import { Button } from '~/components/ui/button'
+import { ChevronRightIcon } from 'lucide-react';
+import { Button } from '~/components/ui/button';
 
 import {
   NavigationMenu,
@@ -8,8 +8,8 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-} from '~/components/ui/navigation-menu'
-import { mainNavigation } from '~/config/navigation'
+} from '~/components/ui/navigation-menu';
+import { mainNavigation } from '~/config/navigation';
 
 const DesktopNav = () => {
   return (
@@ -34,7 +34,9 @@ const DesktopNav = () => {
                       <div className="flex h-full flex-col justify-between">
                         <div className="flex flex-col">
                           <p className="text-base">{item.title}</p>
-                          <p className="text-muted-foreground text-sm">{item.description}</p>
+                          <p className="text-muted-foreground text-sm">
+                            {item.description}
+                          </p>
                         </div>
                         <Button className="mt-10" size="sm">
                           Test button
@@ -61,7 +63,7 @@ const DesktopNav = () => {
         </NavigationMenuList>
       </NavigationMenu>
     </div>
-  )
-}
+  );
+};
 
-export default DesktopNav
+export default DesktopNav;

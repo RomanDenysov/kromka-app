@@ -1,4 +1,4 @@
-import type { LucideProps } from 'lucide-react'
+import type { LucideProps } from 'lucide-react';
 
 export const Icons = {
   kromka: (props: LucideProps) => (
@@ -19,7 +19,12 @@ export const Icons = {
     // if color is 'red', then the color prop should be 'fill="#E7451C"'
     // if color is 'gray', then the color prop should be 'fill="#8B8B8B"'
 
-    <svg {...props} viewBox="0 0 1030 1030" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      {...props}
+      viewBox="0 0 1030 1030"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <title>Kromka Logo Icon</title>
       <path d="M470.145 1029.56V515.448C470.145 232.826 468.778 1.34646 467.002 1.79168C378.99 12.1107 278.881 50.6938 212.885 99.1448C-46.6116 289.802 -73.1173 660.351 156.754 885.55C231.729 958.674 344.418 1013.85 445.441 1026.42L470.145 1029.56Z" />
       <path d="M893.951 168.228C821.689 90.1729 735.02 39.4791 631.764 14.8058C610.661 9.86878 576.09 4.48592 554.531 2.69376L515.041 0V243.145V485.844H599.427H683.405L797.872 355.298C860.747 283.52 915.964 220.269 919.997 214.435C927.631 204.567 927.633 204.117 893.951 168.228Z" />
@@ -28,4 +33,4 @@ export const Icons = {
       {/* <span className="sr-only">Kromka small logo</span> */}
     </svg>
   ),
-}
+};

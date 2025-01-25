@@ -1,71 +1,86 @@
 'use client'
 
 import { useCallback } from 'react'
-import MultipleSelector from '~/components/multiple-selector'
+import MultipleSelector, { type Option } from '~/components/multiple-selector'
 import { api } from '~/trpc/react'
 
-export const IngredientsSelector = ({
-  value,
-  onChangeAction,
-}: {
-  value: string[] // Теперь просто массив имен
-  onChangeAction: (value: string[]) => void
-}) => {
-  const { data: ingredients, isLoading } = api.ingredients.getAll.useQuery()
+type Props = {
+  value: string[]
+  onChange: (value: string[]) => void
+}
+
+export const IngredientsSelector = ({ value, onChange }: Props) => {
+  const utils = api.useUtils()
+  const { data: ingredients, isLoading, refetch } = api.ingredients.getAll.useQuery()
   const { mutate: createIngredient } = api.ingredients.create.useMutation({
-    // Можно добавить обработку успешного создания если нужно
+    onSuccess: async () => {
+      await utils.ingredients.getAll.invalidate()
+      await refetch()
+    },
   })
 
-  // Синхронный поиск по существующим ингредиентам
+  const normalizeIngredientName = (name: string) => {
+    return name.trim().toLowerCase()
+  }
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   const handleSearch = useCallback(
     (searchValue: string) => {
       if (!ingredients) {
         return []
       }
-
+      const normalizedSearch = normalizeIngredientName(searchValue)
       return ingredients
-        .filter((ingredient) => ingredient.name.toLowerCase().includes(searchValue.toLowerCase()))
+        .filter(
+          (ingredient) =>
+            normalizeIngredientName(ingredient.name).includes(normalizedSearch) &&
+            ingredient.name.trim().length > 0,
+        )
         .map((ingredient) => ({
-          value: ingredient.name,
+          value: normalizeIngredientName(ingredient.name),
           label: ingredient.name,
         }))
     },
     [ingredients],
   )
 
-  // Конвертируем значения в формат для MultipleSelector
-  const selectedOptions = value.map((name) => ({
-    value: name,
-    label: name,
-  }))
+  const selectedOptions: Option[] = value
+    .filter((name) => name.trim().length > 0)
+    .map((name) => ({
+      value: normalizeIngredientName(name),
+      label: name,
+    }))
 
-  const handleChange = (newValue: Array<{ value: string; label: string }>) => {
-    // Получаем массив имен из новых значений
-    const newIngredients = newValue.map((v) => v.value)
+  const handleChange = (newValue: Option[]) => {
+    // Фильтруем пустые значения и нормализуем
+    const validNames = newValue
+      .map((option) => normalizeIngredientName(option.value))
+      .filter((name) => name.length > 0)
 
-    // Проверяем, есть ли новые ингредиенты, которых нет в базе
-    const existingNames = new Set(ingredients?.map((i) => i.name) || [])
-
-    for (const { value: name } of newValue) {
+    // Проверяем новые ингредиенты и создаем их если необходимо
+    const existingNames = new Set(ingredients?.map((i) => normalizeIngredientName(i.name)) || [])
+    for (const name of validNames) {
       if (!existingNames.has(name)) {
-        // Создаем новый ингредиент
         createIngredient({ name })
       }
     }
 
-    // Обновляем значение в форме
-    onChangeAction(newIngredients)
+    // Обновляем значение в форме только с валидными именами
+    onChange(validNames)
   }
 
   return (
     <MultipleSelector
       value={selectedOptions}
       onChange={handleChange}
-      defaultOptions={
-        ingredients?.map((i) => ({
-          value: i.name,
-          label: i.name,
-        })) || []
+      options={
+        // Используем options вместо defaultOptions
+        ingredients
+          ?.filter((i) => i.name.trim().length > 0)
+          .map((i) => ({
+            value: normalizeIngredientName(i.name),
+            label: i.name,
+          })) || []
       }
       onSearchSync={handleSearch}
       creatable

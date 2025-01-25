@@ -1,5 +1,6 @@
 import { DataTable } from '~/components/data-table'
 import { Typography } from '~/components/typography'
+import { api } from '~/trpc/server'
 import { columns } from './columns'
 
 const dummyStores = [
@@ -46,11 +47,15 @@ const dummyStores = [
   },
 ]
 
-export default function Page() {
+export default async function Page() {
+  const stores = await api.stores.getAll()
+
+  console.log('stores', stores)
+
   return (
     <>
       <Typography variant="h3">Stores</Typography>
-      <DataTable columns={columns} data={dummyStores} canCreateNew />
+      <DataTable filterKey="name" columns={columns} data={stores} canCreateNew />
     </>
   )
 }

@@ -1,6 +1,10 @@
-import { ChevronRightIcon } from 'lucide-react'
-import Link from 'next/link'
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '~/components/ui/collapsible'
+import { ChevronRightIcon } from 'lucide-react';
+import Link from 'next/link';
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '~/components/ui/collapsible';
 import {
   Sidebar,
   SidebarContent,
@@ -14,8 +18,8 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
   SidebarRail,
-} from '~/components/ui/sidebar'
-import { adminSidebarNavigation } from '~/config/navigation'
+} from '~/components/ui/sidebar';
+import { adminSidebarNavigation } from '~/config/navigation';
 
 const AdminSidebar = () => {
   return (
@@ -46,7 +50,9 @@ const AdminSidebar = () => {
                           {item.items.map((subItem) => (
                             <SidebarMenuSubItem key={subItem.title}>
                               <SidebarMenuSubButton asChild>
-                                <Link href={`/admin/${item.href + subItem.href}`}>
+                                <Link
+                                  href={`/admin/${item.href + subItem.href}`}
+                                >
                                   <subItem.icon />
                                   <span>{subItem.title}</span>
                                 </Link>
@@ -66,7 +72,7 @@ const AdminSidebar = () => {
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
-                ),
+                )
               )}
             </SidebarMenu>
           </SidebarGroupContent>
@@ -74,7 +80,7 @@ const AdminSidebar = () => {
       </SidebarContent>
       <SidebarRail />
     </Sidebar>
-  )
-}
+  );
+};
 
-export { AdminSidebar }
+export { AdminSidebar };

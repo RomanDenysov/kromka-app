@@ -3,11 +3,13 @@ import { create } from 'zustand'
 type CategorySheetProps = {
   isOpen: boolean
   onClose: () => void
-  onOpen: () => void
+  onOpen: (onSuccess?: (categoryId: string) => void) => void
+  onSuccessCallback?: (categoryId: string) => void
 }
 
 export const useCategorySheet = create<CategorySheetProps>((set) => ({
   isOpen: false,
   onClose: () => set({ isOpen: false }),
-  onOpen: () => set({ isOpen: true }),
+  onOpen: (onSuccess) => set({ isOpen: true, onSuccessCallback: onSuccess }),
+  onSuccessCallback: undefined,
 }))

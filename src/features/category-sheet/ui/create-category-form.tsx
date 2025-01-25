@@ -10,7 +10,7 @@ import {
 import { Input } from '~/components/ui/input'
 import { Switch } from '~/components/ui/switch'
 import { Textarea } from '~/components/ui/textarea'
-import { slugGenerator } from '~/lib/slug-generator'
+import { slugGenerator } from '~/lib/utils/slug-generator'
 import { useCreateCategoryForm } from '../use-create-category-form'
 
 export const CreateCategoryForm = () => {

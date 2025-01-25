@@ -3,21 +3,10 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import Image from 'next/image'
 import { Checkbox } from '~/components/ui/checkbox'
-import type { ProductInternal } from '~/types/product'
+import type { Product } from '~/server/api/routers/products/types'
 import { Actions } from './actions'
 
-export type Product = {
-  id: string
-  title: string
-  description: string
-  category: string
-  price: string
-  image: string
-  status: string
-  available: boolean
-}
-
-export const columns: ColumnDef<ProductInternal>[] = [
+export const columns: ColumnDef<Product>[] = [
   {
     id: 'select',
     header: ({ table }) => (

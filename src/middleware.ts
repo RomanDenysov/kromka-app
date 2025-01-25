@@ -1,6 +1,6 @@
 import { betterFetch } from '@better-fetch/fetch'
 import { type NextRequest, NextResponse } from 'next/server'
-import type { Session } from './lib/auth'
+import type { Session } from './server/auth/auth'
 
 // const authRoutes = ['/sign-in', '/login']
 const adminRoutes = ['/admin/', '/admin']
@@ -29,7 +29,7 @@ export default async function authMiddleware(request: NextRequest) {
   //   return NextResponse.redirect(new URL('/', request.url))
   // }
 
-  if (isAdminRoute && session?.user.role !== 'admin') {
+  if (isAdminRoute) {
     return NextResponse.redirect(new URL('/', request.url))
   }
 

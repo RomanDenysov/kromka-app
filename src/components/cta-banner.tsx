@@ -1,10 +1,10 @@
-import { MoveRightIcon, PhoneCallIcon } from 'lucide-react'
-import Link from 'next/link'
-import Balancer from 'react-wrap-balancer'
-import { cn } from '~/lib/utils'
-import { Typography } from './typography'
-import { Badge } from './ui/badge'
-import { buttonVariants } from './ui/button'
+import { MoveRightIcon, PhoneCallIcon } from 'lucide-react';
+import Link from 'next/link';
+import Balancer from 'react-wrap-balancer';
+import { cn } from '~/lib/utils/cn';
+import { Typography } from './typography';
+import { Badge } from './ui/badge';
+import { buttonVariants } from './ui/button';
 
 export const CtaBanner = () => {
   return (
@@ -19,8 +19,9 @@ export const CtaBanner = () => {
             Radi sa spájame s tými, ktorí majú na jedlo podobný pohľad
           </Typography>
           <Typography variant="p">
-            Pečieme kváskový chlieb, koláče, ponúkame dobrú kávu, a do našich predajní vyberáme samé
-            lakocinky. Nájdete nás v Prešove aj v Košiciach, zastavte sa!
+            Pečieme kváskový chlieb, koláče, ponúkame dobrú kávu, a do našich
+            predajní vyberáme samé lakocinky. Nájdete nás v Prešove aj v
+            Košiciach, zastavte sa!
           </Typography>
         </Balancer>
         <div className="flex flex-col-reverse gap-4 px-2 sm:flex-row sm:px-0">
@@ -33,5 +34,5 @@ export const CtaBanner = () => {
         </div>
       </div>
     </article>
-  )
-}
+  );
+};

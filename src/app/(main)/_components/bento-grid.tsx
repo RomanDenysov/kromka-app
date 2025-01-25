@@ -1,8 +1,8 @@
-import Image from 'next/image'
-import Link from 'next/link'
-import Balancer from 'react-wrap-balancer'
-import { Typography } from '~/components/typography'
-import { cn } from '~/lib/utils'
+import Image from 'next/image';
+import Link from 'next/link';
+import Balancer from 'react-wrap-balancer';
+import { Typography } from '~/components/typography';
+import { cn } from '~/lib/utils/cn';
 
 export const BentoGrid = () => {
   return (
@@ -12,12 +12,18 @@ export const BentoGrid = () => {
       <BentoGridItem href="#" className="" />
       <BentoGridItem href="#" className="col-span-2 aspect-video" />
     </section>
-  )
-}
+  );
+};
 
-export const BentoGridItem = ({ href, className }: { href: string; className?: string }) => {
+export const BentoGridItem = ({
+  href,
+  className,
+}: { href: string; className?: string }) => {
   return (
-    <Link href={href} className={cn('relative aspect-auto rounded bg-muted', className)}>
+    <Link
+      href={href}
+      className={cn('relative aspect-auto rounded bg-muted', className)}
+    >
       <Image
         priority
         src="/placeholder.png"
@@ -33,5 +39,5 @@ export const BentoGridItem = ({ href, className }: { href: string; className?: s
         </Balancer>
       </div>
     </Link>
-  )
-}
+  );
+};

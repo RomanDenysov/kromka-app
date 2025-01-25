@@ -3,7 +3,7 @@ import { getUsers } from '~/actions/user'
 import { DataTable } from '~/components/data-table'
 import { LoadingSpinner } from '~/components/loading-spinner'
 import { Typography } from '~/components/typography'
-import { log } from '~/lib/log'
+import { log } from '~/lib/utils/log'
 import { columns } from './columns'
 
 export default async function Page() {

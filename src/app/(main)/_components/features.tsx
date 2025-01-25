@@ -1,8 +1,8 @@
-import Link from 'next/link'
-import Balancer from 'react-wrap-balancer'
-import { Typography } from '~/components/typography'
-import { Badge } from '~/components/ui/badge'
-import { cn } from '~/lib/utils'
+import Link from 'next/link';
+import Balancer from 'react-wrap-balancer';
+import { Typography } from '~/components/typography';
+import { Badge } from '~/components/ui/badge';
+import { cn } from '~/lib/utils/cn';
 
 const FeatureItem = ({
   href,
@@ -10,17 +10,17 @@ const FeatureItem = ({
   description,
   className,
 }: {
-  href: string
-  title: string
-  description: string
-  className?: string
+  href: string;
+  title: string;
+  description: string;
+  className?: string;
 }) => {
   return (
     <Link
       href={href}
       className={cn(
         'flex aspect-square flex-col justify-between rounded-md bg-muted p-6',
-        className,
+        className
       )}
     >
       <Typography variant="h4" className="text-left font-bold text-2xl">
@@ -33,8 +33,8 @@ const FeatureItem = ({
         {description}
       </Typography>
     </Link>
-  )
-}
+  );
+};
 
 export const Features = () => {
   return (
@@ -53,7 +53,8 @@ export const Features = () => {
                 variant="p"
                 className="max-w-xl text-left text-lg text-muted-foreground leading-relaxed tracking-tight md:text-xl"
               >
-                Vytvorte si svoje Kromka konto a objavte všetky naše chutné produkty
+                Vytvorte si svoje Kromka konto a objavte všetky naše chutné
+                produkty
               </Typography>
             </Balancer>
           </div>
@@ -84,5 +85,5 @@ export const Features = () => {
         </div>
       </div>
     </section>
-  )
-}
+  );
+};

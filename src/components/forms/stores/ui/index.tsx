@@ -16,14 +16,34 @@ import {
 } from '~/components/ui/form'
 import { Input } from '~/components/ui/input'
 import { Switch } from '~/components/ui/switch'
-import { slugGenerator } from '~/lib/slug-generator'
-import { useStoreOperations } from '../api/use-store-operation'
+import { toast } from '~/hooks/use-toast'
+import { log } from '~/lib/utils/log'
+import { slugGenerator } from '~/lib/utils/slug-generator'
+import type { Store } from '~/server/types/store'
+import { api } from '~/trpc/react'
 import { useStoreForm } from '../hooks/use-store-form'
 import type { CreateStoreInput } from '../types'
 
-export const StoreForm = ({ storeId }: { storeId?: string }) => {
-  const { store, isLoading, handleSubmit } = useStoreOperations(storeId)
+type Props = {
+  store?: Store
+}
+
+export const StoreForm = ({ store }: Props) => {
   const form = useStoreForm(store)
+  const utils = api.useUtils()
+  const { mutateAsync: createStore, isPending } = api.stores.create.useMutation({
+    onSuccess: () => {
+      utils.stores.invalidate()
+      log.info('Store created')
+      toast({
+        title: 'Store created',
+        description: 'Store created successfully',
+      })
+    },
+    onError: (error) => {
+      log.error('Error creating store:', error)
+    },
+  })
 
   const handleNameBlur = (event: React.FocusEvent<HTMLInputElement>) => {
     const value = event.target.value
@@ -31,8 +51,8 @@ export const StoreForm = ({ storeId }: { storeId?: string }) => {
   }
 
   const onSubmit = async (values: CreateStoreInput) => {
-    console.log('Form submitted', values) // Добавьте это
-    await handleSubmit(values)
+    log.info('Form submitted', values) // Добавьте это
+    await createStore(values)
   }
 
   return (
@@ -51,7 +71,7 @@ export const StoreForm = ({ storeId }: { storeId?: string }) => {
             <Badge variant="destructive">Closed</Badge>
           )}
         </div>
-        <FormActionButtons isLoading={isLoading} discard={form.reset} form="store-form" />
+        <FormActionButtons isLoading={isPending} discard={form.reset} form="store-form" />
       </div>
       <Form {...form}>
         <form

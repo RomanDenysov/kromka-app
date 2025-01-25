@@ -9,10 +9,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '~/components/ui/dropdown-menu'
+import { log } from '~/lib/utils/log'
 
 export const Actions = ({ id }: { id: string }) => {
   const handleDelete = async () => {
-    console.log('Delete product')
+    log.info('Delete product')
   }
   const isPending = false
 

@@ -3,45 +3,37 @@ export type FileConfig = {
   accept: string[]
 }
 
+export type RouterInput = {
+  [TKey: string]: FileConfig
+}
+
 export type UploadMetadata = {
   uploadedBy: string
   // TODO: add more metadata
 }
 
-export type UploadResult = {
-  fileUrl: string
-  // TODO: add more data if needed
+export type FileData = {
+  name: string
+  size: number
+  url: string
+  key: string
+  type: string
 }
 
-export type UploadEndpoint = {
-  config: {
-    [key: string]: FileConfig
-  }
-  middleware: () => Promise<UploadMetadata>
+export type UploadResult = FileData & UploadMetadata
 
-  onUploadComplete: (args: {
-    metadata: UploadMetadata
-    file: UploadedFile
-  }) => Promise<UploadResult>
+export interface UploadOptions {
+  onUploadError?: (error: Error) => void
+  onUploadComplete?: (res: FileData[]) => void
+  onUploadBegin?: (fileName: string) => void
+  onProgress?: (progress: number) => void
+}
+export type UploadEndpoint = {
+  config: RouterInput
+  middleware: () => Promise<UploadMetadata>
+  onUploadComplete: (args: { metadata: UploadMetadata; file: FileData }) => Promise<UploadResult>
 }
 
 export type UploadRouter = {
   [K: string]: UploadEndpoint
-}
-
-export interface UploadOptions {
-  onUploadError?: (error: Error) => void
-  onUploadComplete?: (res: UploadedFile[]) => void
-  onUploadBegin?: (fileName: string) => void
-}
-
-export type UploadedFile = {
-  url: string
-  name: string
-  size: string
-  key: string
-}
-
-export type RouterInput = {
-  [TKey: string]: FileConfig
 }

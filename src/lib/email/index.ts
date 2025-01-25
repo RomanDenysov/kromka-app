@@ -2,6 +2,7 @@
 
 import nodemailer, { type SentMessageInfo } from 'nodemailer'
 import { env } from '~/env'
+import { log } from '../utils/log'
 
 const host = env.EMAIL_HOST
 const username = env.EMAIL_USERNAME
@@ -53,7 +54,7 @@ export async function sendEmail({
     }
 
     const info = await transporter.sendMail(mailOptions)
-    console.log('Message sent: %s', info.messageId)
+    log.info('Message sent: %s', info.messageId)
 
     return info
   } catch (error) {

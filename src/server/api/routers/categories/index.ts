@@ -1,8 +1,9 @@
 import { createId } from '@paralleldrive/cuid2'
+import { TRPCError } from '@trpc/server'
 import { eq } from 'drizzle-orm'
 import { z } from 'zod'
-import { categories } from '~/db/schema'
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '~/server/api/trpc'
+import { categories } from '~/server/db/schema'
 import { createCategoryValidator, updateCategoryValidator } from './validator'
 
 export const categoriesRouter = createTRPCRouter({
@@ -10,28 +11,42 @@ export const categoriesRouter = createTRPCRouter({
     return await ctx.db.query.categories.findMany()
   }),
 
-  byId: publicProcedure.input(z.object({ id: z.string() })).query(async ({ ctx, input }) => {
+  getById: publicProcedure.input(z.object({ id: z.string() })).query(async ({ ctx, input }) => {
     return await ctx.db.query.categories.findFirst({
       where: eq(categories.id, input.id),
     })
   }),
 
-  bySlug: publicProcedure.input(z.object({ slug: z.string() })).query(async ({ ctx, input }) => {
+  getBySlug: publicProcedure.input(z.object({ slug: z.string() })).query(async ({ ctx, input }) => {
     return await ctx.db.query.categories.findFirst({
       where: eq(categories.slug, input.slug),
     })
   }),
 
   create: protectedProcedure.input(createCategoryValidator).mutation(async ({ ctx, input }) => {
-    return await ctx.db.insert(categories).values({
-      id: createId(),
-      name: input.name,
-      description: '',
-      slug: input.slug,
-      allowsDelivery: false,
-      isVisible: input.isVisible,
-      sortOrder: input.sortOrder,
-    })
+    const [category] = await ctx.db
+      .insert(categories)
+      .values({
+        id: createId(),
+        name: input.name,
+        description: '',
+        slug: input.slug,
+        allowsDelivery: false,
+        isVisible: input.isVisible,
+        sortOrder: input.sortOrder,
+      })
+      .returning({ id: categories.id })
+
+    if (!category) {
+      throw new TRPCError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'Failed to create category',
+      })
+    }
+    return {
+      success: true,
+      id: category.id,
+    }
   }),
 
   update: protectedProcedure.input(updateCategoryValidator).mutation(async ({ ctx, input }) => {

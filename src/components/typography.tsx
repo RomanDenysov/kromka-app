@@ -1,6 +1,6 @@
-import { type VariantProps, cva } from 'class-variance-authority'
-import React, { type JSX, type ReactNode } from 'react'
-import { cn } from '~/lib/utils'
+import { type VariantProps, cva } from 'class-variance-authority';
+import React, { type JSX, type ReactNode } from 'react';
+import { cn } from '~/lib/utils/cn';
 
 const typographyVariants = cva('', {
   variants: {
@@ -19,32 +19,48 @@ const typographyVariants = cva('', {
   defaultVariants: {
     variant: 'p',
   },
-})
+});
 
-type TypographyVariant = 'h1' | 'h2' | 'h3' | 'h4' | 'p' | 'lead' | 'large' | 'small' | 'span'
+type TypographyVariant =
+  | 'h1'
+  | 'h2'
+  | 'h3'
+  | 'h4'
+  | 'p'
+  | 'lead'
+  | 'large'
+  | 'small'
+  | 'span';
 
-const variantElements: Record<TypographyVariant, keyof JSX.IntrinsicElements> = {
-  h1: 'h1',
-  h2: 'h2',
-  h3: 'h3',
-  h4: 'h4',
-  p: 'p',
-  lead: 'p',
-  large: 'div',
-  small: 'small',
-  span: 'span',
-}
+const variantElements: Record<TypographyVariant, keyof JSX.IntrinsicElements> =
+  {
+    h1: 'h1',
+    h2: 'h2',
+    h3: 'h3',
+    h4: 'h4',
+    p: 'p',
+    lead: 'p',
+    large: 'div',
+    small: 'small',
+    span: 'span',
+  };
 
 interface TypographyProps extends VariantProps<typeof typographyVariants> {
-  children: ReactNode
-  className?: string
+  children: ReactNode;
+  className?: string;
 }
 
-export function Typography({ variant = 'p', children, className }: TypographyProps) {
-  const Element = variantElements[variant as TypographyVariant] as keyof JSX.IntrinsicElements
+export function Typography({
+  variant = 'p',
+  children,
+  className,
+}: TypographyProps) {
+  const Element = variantElements[
+    variant as TypographyVariant
+  ] as keyof JSX.IntrinsicElements;
   return React.createElement(
     Element,
     { className: cn(typographyVariants({ variant, className })) },
-    children,
-  )
+    children
+  );
 }

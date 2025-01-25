@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import type {
   ColumnDef,
@@ -6,7 +6,7 @@ import type {
   Row,
   RowSelectionState,
   SortingState,
-} from '@tanstack/react-table'
+} from '@tanstack/react-table';
 import {
   flexRender,
   getCoreRowModel,
@@ -14,14 +14,19 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from '@tanstack/react-table'
+} from '@tanstack/react-table';
 
-import { ChevronLeftIcon, ChevronRightIcon, PlusIcon, TrashIcon } from 'lucide-react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { useState } from 'react'
-import { Button, buttonVariants } from '~/components/ui/button'
-import { Input } from '~/components/ui/input'
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  PlusIcon,
+  TrashIcon,
+} from 'lucide-react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useState } from 'react';
+import { Button, buttonVariants } from '~/components/ui/button';
+import { Input } from '~/components/ui/input';
 import {
   Table,
   TableBody,
@@ -29,16 +34,16 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '~/components/ui/table'
-import { cn } from '~/lib/utils'
+} from '~/components/ui/table';
+import { cn } from '~/lib/utils/cn';
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
-  filterKey?: string
-  onDelete?: (rows: Row<TData>[]) => void
-  disabled?: boolean
-  canCreateNew?: boolean
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
+  filterKey?: string;
+  onDelete?: (rows: Row<TData>[]) => void;
+  disabled?: boolean;
+  canCreateNew?: boolean;
 }
 
 export function DataTable<TData, TValue>({
@@ -49,10 +54,10 @@ export function DataTable<TData, TValue>({
   canCreateNew = false,
   disabled = false,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-  const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
-  const pathname = usePathname()
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+  const pathname = usePathname();
   const table = useReactTable({
     data,
     columns,
@@ -68,7 +73,7 @@ export function DataTable<TData, TValue>({
       columnFilters,
       rowSelection,
     },
-  })
+  });
 
   return (
     <div>
@@ -79,7 +84,9 @@ export function DataTable<TData, TValue>({
           placeholder={`Filter ${filterKey}...`}
           className="max-w-sm"
           value={(table.getColumn(filterKey)?.getFilterValue() as string) ?? ''}
-          onChange={(event) => table.getColumn(filterKey)?.setFilterValue(event.target.value)}
+          onChange={(event) =>
+            table.getColumn(filterKey)?.setFilterValue(event.target.value)
+          }
         />
         <div className="flex flex-row gap-3">
           {table.getFilteredSelectedRowModel().rows.length > 0 && (
@@ -114,9 +121,12 @@ export function DataTable<TData, TValue>({
                     <TableHead key={header.id}>
                       {header.isPlaceholder
                         ? null
-                        : flexRender(header.column.columnDef.header, header.getContext())}
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
                     </TableHead>
-                  )
+                  );
                 })}
               </TableRow>
             ))}
@@ -130,15 +140,24 @@ export function DataTable<TData, TValue>({
                   data-state={row.getIsSelected() && 'selected'}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="max-w-20 truncate text-wrap">
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    <TableCell
+                      key={cell.id}
+                      className="max-w-20 truncate text-wrap"
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
                     </TableCell>
                   ))}
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
                   No results.
                 </TableCell>
               </TableRow>
@@ -172,5 +191,5 @@ export function DataTable<TData, TValue>({
         </Button>
       </div>
     </div>
-  )
+  );
 }

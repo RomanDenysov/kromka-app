@@ -1,8 +1,13 @@
 import { createTRPCRouter, publicProcedure } from '../../trpc'
 
 export const authRouter = createTRPCRouter({
-  getSession: publicProcedure.query(async () => {
-    const user = null
-    return null
+  getUser: publicProcedure.query(async ({ ctx }) => {
+    const user = await ctx.session?.user
+
+    if (!user) {
+      return null
+    }
+
+    return user
   }),
 })

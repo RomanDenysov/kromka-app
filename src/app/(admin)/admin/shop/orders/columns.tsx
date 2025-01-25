@@ -39,15 +39,6 @@ export const columns: ColumnDef<Order>[] = [
   {
     accessorKey: 'items',
     header: 'Items',
-    cell: ({ cell }) => (
-      <ul>
-        {cell.getValue().map((item) => (
-          <li key={item.title}>
-            {item.title} - {item.quantity}
-          </li>
-        ))}
-      </ul>
-    ),
   },
   {
     accessorKey: 'status',

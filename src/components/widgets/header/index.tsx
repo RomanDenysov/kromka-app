@@ -1,11 +1,11 @@
-import Link from 'next/link'
-import { Icons } from '~/components/icons'
-import { buttonVariants } from '~/components/ui/button'
-import { Container } from '~/components/ui/container'
-import { cn } from '~/lib/utils'
-import { UserButton } from '../user-button'
-import DesktopNav from './desktop-nav'
-import MobileNav from './mobile-nav'
+import Link from 'next/link';
+import { Icons } from '~/components/icons';
+import { buttonVariants } from '~/components/ui/button';
+import { Container } from '~/components/ui/container';
+import { cn } from '~/lib/utils/cn';
+import { UserButton } from '../user-button';
+import DesktopNav from './desktop-nav';
+import MobileNav from './mobile-nav';
 
 const Header = () => {
   return (
@@ -19,14 +19,17 @@ const Header = () => {
           <Icons.kromka className="h-5 lg:h-7" />
         </div>
         <div className="flex w-full items-center justify-end gap-3">
-          <Link href="/sign-in" className={cn(buttonVariants({ variant: 'default', size: 'sm' }))}>
+          <Link
+            href="/sign-in"
+            className={cn(buttonVariants({ variant: 'default', size: 'sm' }))}
+          >
             Sign in
           </Link>
           <UserButton />
         </div>
       </Container>
     </header>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

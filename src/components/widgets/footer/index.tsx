@@ -1,9 +1,9 @@
-import Link from 'next/link'
-import { Icons } from '~/components/icons'
-import { Typography } from '~/components/typography'
-import { Container } from '~/components/ui/container'
-import { Separator } from '~/components/ui/separator'
-import { company } from '~/config/business'
+import Link from 'next/link';
+import { Icons } from '~/components/icons';
+import { Typography } from '~/components/typography';
+import { Container } from '~/components/ui/container';
+import { Separator } from '~/components/ui/separator';
+import { company } from '~/config/business';
 
 const Footer = () => {
   return (
@@ -52,7 +52,7 @@ const Footer = () => {
         </div>
       </Container>
     </footer>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;

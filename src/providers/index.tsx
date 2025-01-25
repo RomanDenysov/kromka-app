@@ -1,5 +1,6 @@
 import { type ReactNode, Suspense } from 'react'
 import { Toaster } from '~/components/ui/toaster'
+import { ConfirmDialog } from '~/components/widgets/confirm-dialog/ui'
 import { CookieBanner } from '~/components/widgets/cookie-banner'
 import { TRPCReactProvider } from '~/trpc/react'
 // import { PostHogProvider } from './posthog-provider'
@@ -24,6 +25,7 @@ export default function Providers({ children }: Props) {
         </Suspense>
         {children}
         <Toaster />
+        <ConfirmDialog />
       </ThemeProvider>
       {/* </PostHogProvider> */}
     </TRPCReactProvider>

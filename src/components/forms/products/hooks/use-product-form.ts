@@ -1,19 +1,19 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useFieldArray, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
 import { useCallback, useEffect, useMemo } from 'react'
-import { createProductSchema, updateProductSchema } from '~/server/api/routers/products/validator'
-import type { Product } from '../types'
+import { convertAmountFromCents } from '~/lib/utils'
+import { createProductSchema } from '~/server/api/routers/products/validator'
+import type { CreateProductInput, Product } from '../types'
 
 export const useProductForm = (product?: Product) => {
-  const validationSchema = product ? updateProductSchema : createProductSchema
-
   const defaultValues = useMemo(
     () =>
       product
         ? {
+            id: product.id,
             name: product.name,
             slug: product.slug,
             description: product.description,
@@ -21,10 +21,19 @@ export const useProductForm = (product?: Product) => {
             isVisible: product.isVisible,
             sortOrder: product.sortOrder,
             status: product.status ?? ('draft' as const),
-            options: product.options,
+            options: product.options.map((option) => ({
+              ...option,
+              price: convertAmountFromCents(option.price),
+              inventory: option.inventory?.map((inv) => ({
+                ...inv,
+                defaultQuantity: convertAmountFromCents(inv.defaultQuantity),
+                currentQuantity: convertAmountFromCents(inv.currentQuantity),
+              })),
+            })),
             ingredients: product.ingredients,
           }
         : {
+            id: undefined,
             name: '',
             slug: '',
             description: '',
@@ -38,23 +47,12 @@ export const useProductForm = (product?: Product) => {
     [product], // зависимость только от product
   )
 
-  const form = useForm<typeof validationSchema._type>({
-    resolver: zodResolver(validationSchema),
+  const form = useForm<CreateProductInput>({
+    resolver: zodResolver(createProductSchema),
     defaultValues,
-    mode: 'onChange', // Добавляем это
+    mode: 'onChange',
     delayError: 500,
   })
-
-  const ingredientsArray = useFieldArray({
-    control: form.control,
-    name: 'ingredients',
-  })
-
-  const addIngredient = () => {
-    ingredientsArray.append({
-      name: '',
-    })
-  }
 
   const onReset = useCallback(() => {
     form.reset(defaultValues)
@@ -68,8 +66,7 @@ export const useProductForm = (product?: Product) => {
 
   return {
     form,
-    ingredientsArray,
-    addIngredient,
+
     onReset,
   }
 }

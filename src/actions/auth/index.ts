@@ -2,6 +2,7 @@
 
 import { redirect } from 'next/navigation'
 import { authClient } from '~/lib/auth-client'
+import { log } from '~/lib/utils/log'
 
 type Provider = 'google'
 
@@ -10,7 +11,7 @@ export async function signInWithProvider(provider: Provider) {
     { provider: provider },
     {
       onSuccess: (ctx) => {
-        console.log(ctx.data)
+        log.info(ctx.data)
         redirect(ctx.data.url)
       },
     },
@@ -18,8 +19,8 @@ export async function signInWithProvider(provider: Provider) {
 }
 export async function logout() {
   await authClient.signOut()
-  console.log('logged out')
+  log.info('logged out')
   const session = await authClient.getSession()
-  console.log(session)
+  log.info(session)
   return redirect('/')
 }

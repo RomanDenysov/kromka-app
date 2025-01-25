@@ -14,19 +14,20 @@ import {
 } from '~/components/ui/command'
 import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover'
 import { useCategorySheet } from '~/features/category-sheet/use-category-sheet'
-import { cn } from '~/lib/utils'
+import { cn } from '~/lib/utils/cn'
 import { api } from '~/trpc/react'
 
 export const CategorySelector = ({
   value,
   onChange,
 }: {
-  value: string
+  value?: string
   onChange: (value: string) => void
 }) => {
   const [openPopover, setOpenPopover] = useState(false)
-  const { data: categories, isLoading } = api.categories.getAll.useQuery()
   const onOpen = useCategorySheet((state) => state.onOpen)
+
+  const { data: categories, isLoading } = api.categories.getAll.useQuery()
   // TODO: Implement category dialog for creating new categories (if categories are not loaded yet call this dialog on field focus)
   return (
     <Popover open={openPopover} onOpenChange={() => setOpenPopover(!openPopover)}>
@@ -79,7 +80,7 @@ export const CategorySelector = ({
               <CommandItem asChild>
                 <Button
                   variant="ghost"
-                  onClick={() => onOpen()}
+                  onClick={() => onOpen(onChange)}
                   className="h-8 w-full justify-start text-left"
                 >
                   <PlusIcon />

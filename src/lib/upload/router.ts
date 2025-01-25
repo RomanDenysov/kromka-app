@@ -1,4 +1,4 @@
-import type { RouterInput, UploadMetadata, UploadResult } from './types'
+import type { FileData, RouterInput, UploadMetadata, UploadResult } from './types'
 
 export function createUploadRouter() {
   return function routerConfig<T extends RouterInput>(config: T) {
@@ -6,10 +6,7 @@ export function createUploadRouter() {
       middleware(fn: () => Promise<UploadMetadata>) {
         return {
           onUploadComplete(
-            callback: (args: {
-              metadata: UploadMetadata
-              file: { url: string; key: string; name: string; size: string }
-            }) => Promise<UploadResult>,
+            callback: (args: { metadata: UploadMetadata; file: FileData }) => Promise<UploadResult>,
           ) {
             return {
               config,

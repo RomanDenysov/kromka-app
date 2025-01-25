@@ -17,12 +17,24 @@ const workingHoursSchema = z.object({
 })
 
 export const createStoreSchema = z.object({
+  id: z.string(),
   name: z.string().min(1, 'Название магазина обязательно'),
   slug: z.string().min(1, 'Slug обязателен'),
   address: addressSchema,
   addressUrl: z.string().url().min(1, 'URL адреса обязателен'),
   workingHours: workingHoursSchema,
   sortOrder: z.number().int().nonnegative(),
+  isVisible: z.boolean().default(true),
+})
+
+export const storeSchema = z.object({
+  id: z.string().min(1),
+  name: z.string().min(1, 'Название магазина обязательно'),
+  slug: z.string().min(1, 'Slug обязателен'),
+  address: addressSchema,
+  addressUrl: z.string().url().min(1, 'URL адреса обязателен'),
+  workingHours: workingHoursSchema,
+  sortOrder: z.number().int().nonnegative().optional(),
   isVisible: z.boolean().default(true),
 })
 

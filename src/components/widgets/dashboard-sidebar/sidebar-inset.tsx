@@ -1,6 +1,9 @@
-import type { ReactNode } from 'react'
-import { Separator } from '~/components/ui/separator'
-import { SidebarInset as RealSidebarInset, SidebarTrigger } from '~/components/ui/sidebar'
+import type { ReactNode } from 'react';
+import { Separator } from '~/components/ui/separator';
+import {
+  SidebarInset as RealSidebarInset,
+  SidebarTrigger,
+} from '~/components/ui/sidebar';
 
 const SidebarInset = ({ children }: { children: ReactNode }) => {
   return (
@@ -11,7 +14,7 @@ const SidebarInset = ({ children }: { children: ReactNode }) => {
       </header>
       <main className="mx-auto size-full bg-accent">{children}</main>
     </RealSidebarInset>
-  )
-}
+  );
+};
 
-export { SidebarInset }
+export { SidebarInset };

@@ -1,15 +1,15 @@
-import { ProductForm } from '~/components/forms/products/ui/product-form'
+import { Suspense } from 'react'
+import { ProductForm } from '~/components/forms/products/ui'
+import { api } from '~/trpc/server'
 
 export default async function Page(props: { params: Promise<{ product: string }> }) {
   const productId = decodeURIComponent((await props.params).product)
 
-  console.log('product', productId)
+  const product = await api.products.getByIdOrSlug(productId)
 
   return (
-    <div>
-      <ProductForm productId={productId} />
-
-      {/* <Upload /> */}
-    </div>
+    <Suspense>
+      <ProductForm product={product} />
+    </Suspense>
   )
 }

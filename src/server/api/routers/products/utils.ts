@@ -1,44 +1,21 @@
-import type { DBCategory } from '~/server/types/categories'
-import type {
-  DBIngredients,
-  DBProduct,
-  DBProductIngredients,
-  DBProductInventory,
-  DBProductOptions,
-} from '~/server/types/products'
+import type { DBIngredients, DBInventory, DBProduct, DBProductOptions, Product } from './types'
 
-export const sanitizeProduct = (
-  product: DBProduct & {
-    category: DBCategory
-    options: (DBProductOptions & { inventory: DBProductInventory[] })[]
-    productIngredients: (DBProductIngredients & { ingredient: DBIngredients })[]
-  },
-) => ({
-  name: product.name,
-  slug: product.slug,
-  description: product.description,
-  category: {
-    id: product.category.id,
-    name: product.category.name,
-  },
-  status: product.status ?? 'draft',
-  sortOrder: product.sortOrder ?? 0,
-  isVisible: product.isVisible ?? true,
-  options: product.options.map((option) => ({
-    sku: option.sku,
-    optionType: option.optionType,
-    unit: option.unit,
-    value: option.value,
-    price: option.price,
-    isDefault: option.isDefault ?? false,
-    sortOrder: option.sortOrder ?? 0,
-    inventory: option.inventory.map((inv) => ({
-      storeId: inv.storeId,
-      quantity: inv.quantity ?? 0,
-      status: inv.status ?? 'inStock',
+type RawProduct = {
+  options: DBProductOptions[] & { inventory: DBInventory[] }[]
+  productIngredients: DBIngredients[]
+} & DBProduct
+
+export function transformProduct(rawProduct: RawProduct): Product {
+  return {
+    ...rawProduct,
+    ingredients: rawProduct.productIngredients.map((ing) => ({
+      id: ing.id,
+      name: ing.ingredientName,
+      // маппинг других необходимых полей
     })),
-  })),
-  ingredients: product.productIngredients.map(({ ingredient }) => ({
-    name: ingredient.name,
-  })),
-})
+    options: rawProduct.options.map((opt) => ({
+      ...opt,
+      inventory: opt.inventory || [],
+    })),
+  }
+}

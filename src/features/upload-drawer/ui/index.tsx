@@ -10,7 +10,7 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from '~/components/ui/drawer'
-import { Upload } from '~/components/widgets/upload'
+import { Upload } from '~/components/widgets/upload/ui'
 import { useUploadDrawer } from '../hooks/use-upload-drawer'
 
 export const UploadDrawer = () => {
