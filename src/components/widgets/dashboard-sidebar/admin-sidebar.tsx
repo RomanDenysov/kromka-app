@@ -1,4 +1,5 @@
 import { ChevronRightIcon } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import {
   Collapsible,
@@ -22,11 +23,13 @@ import {
 import { adminSidebarNavigation } from '~/config/navigation';
 
 const AdminSidebar = () => {
+  const t = useTranslations('admin.sidebar');
+
   return (
     <Sidebar collapsible="icon" variant="sidebar">
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Test</SidebarGroupLabel>
+          <SidebarGroupLabel>{t('dashboard')}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {adminSidebarNavigation.map((item) =>
@@ -39,9 +42,9 @@ const AdminSidebar = () => {
                   >
                     <SidebarMenuItem>
                       <CollapsibleTrigger asChild>
-                        <SidebarMenuButton tooltip={item.title}>
+                        <SidebarMenuButton tooltip={t(item.title)}>
                           <item.icon />
-                          <span>{item.title}</span>
+                          <span>{t(item.title)}</span>
                           <ChevronRightIcon className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                         </SidebarMenuButton>
                       </CollapsibleTrigger>
@@ -54,7 +57,7 @@ const AdminSidebar = () => {
                                   href={`/admin/${item.href + subItem.href}`}
                                 >
                                   <subItem.icon />
-                                  <span>{subItem.title}</span>
+                                  <span>{t(subItem.title)}</span>
                                 </Link>
                               </SidebarMenuSubButton>
                             </SidebarMenuSubItem>
@@ -68,7 +71,7 @@ const AdminSidebar = () => {
                     <SidebarMenuButton asChild tooltip={item.title}>
                       <Link href={`/admin/${item.href}`}>
                         <item.icon />
-                        <span>{item.title}</span>
+                        <span>{t(item.title)}</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

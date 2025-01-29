@@ -1,9 +1,15 @@
-import type { DBIngredients, DBInventory, DBProduct, DBProductOptions, Product } from './types'
+import type {
+  DBIngredients,
+  DBInventory,
+  DBProduct,
+  DBProductOptions,
+  Product,
+} from './schemas';
 
 type RawProduct = {
-  options: DBProductOptions[] & { inventory: DBInventory[] }[]
-  productIngredients: DBIngredients[]
-} & DBProduct
+  options: DBProductOptions[] & { inventory: DBInventory[] }[];
+  productIngredients: DBIngredients[];
+} & DBProduct;
 
 export function transformProduct(rawProduct: RawProduct): Product {
   return {
@@ -17,5 +23,5 @@ export function transformProduct(rawProduct: RawProduct): Product {
       ...opt,
       inventory: opt.inventory || [],
     })),
-  }
+  };
 }

@@ -1,5 +1,5 @@
-import { createEnv } from '@t3-oss/env-nextjs'
-import { z, type ZodError } from 'zod'
+import { createEnv } from '@t3-oss/env-nextjs';
+import { type ZodError, z } from 'zod';
 
 const server: Parameters<typeof createEnv>[0]['server'] = {
   BETTER_AUTH_SECRET: z.string().min(1),
@@ -10,11 +10,13 @@ const server: Parameters<typeof createEnv>[0]['server'] = {
   EMAIL_USERNAME: z.string().min(1),
   EMAIL_HOST: z.string().min(1),
   EMAIL_PASSWORD: z.string().min(1),
-}
+};
 
 export const env = createEnv({
   server: {
-    NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
+    NODE_ENV: z
+      .enum(['development', 'production', 'test'])
+      .default('development'),
     PORT: z.coerce.number().default(3000),
 
     BETTER_AUTH_SECRET: z.string().min(1),
@@ -35,6 +37,8 @@ export const env = createEnv({
     MINIO_ACCESS_KEY: z.string().min(1),
     MINIO_SECRET_KEY: z.string().min(1),
     MINIO_BUCKET_NAME: z.string().min(1),
+
+    OTP_SECRET: z.string().min(1),
   },
   client: {
     NEXT_PUBLIC_POSTHOG_KEY: z.string().min(1),
@@ -67,6 +71,8 @@ export const env = createEnv({
     MINIO_SECRET_KEY: process.env.MINIO_SECRET_KEY,
     MINIO_BUCKET_NAME: process.env.MINIO_BUCKET_NAME,
 
+    OTP_SECRET: process.env.OTP_SECRET,
+
     NEXT_PUBLIC_MINIO_ENDPOINT: process.env.NEXT_PUBLIC_MINIO_ENDPOINT,
     NEXT_PUBLIC_MINIO_BUCKET_NAME: process.env.NEXT_PUBLIC_MINIO_BUCKET_NAME,
   },
@@ -74,7 +80,10 @@ export const env = createEnv({
   emptyStringAsUndefined: true,
   onValidationError: (error: ZodError) => {
     // biome-ignore lint/suspicious/noConsole: <explanation>
-    console.error('❌ Invalid environment variables:', error.flatten().fieldErrors)
-    process.exit(1)
+    console.error(
+      '❌ Invalid environment variables:',
+      error.flatten().fieldErrors
+    );
+    process.exit(1);
   },
-})
+});

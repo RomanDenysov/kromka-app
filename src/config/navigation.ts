@@ -8,111 +8,111 @@ import {
   ShoppingBasketIcon,
   StoreIcon,
   UsersRoundIcon,
-} from 'lucide-react'
+} from 'lucide-react';
 
 export const mainNavigation = [
   {
-    title: 'Domov',
+    title: 'home.title',
     href: '/',
-    description: '',
+    description: 'home.description',
   },
   {
-    title: 'Eshop',
-    description: '',
+    title: 'eshop.title',
+    description: 'eshop.description',
     items: [
       {
-        title: 'Eshop',
+        title: 'eshop.stores',
         href: '/eshop',
       },
       {
-        title: 'Predajne',
-        href: '/eshop/stores',
+        title: 'eshop.products',
+        href: '/eshop/products',
       },
     ],
   },
   {
-    title: 'Kromka',
-    description: '',
+    title: 'kromka.title',
+    description: 'kromka.description',
     items: [
       {
-        title: 'O nás',
+        title: 'kromka.about',
         href: '/about',
       },
       {
-        title: 'Kontakt',
+        title: 'kromka.contact',
         href: '/contacts',
       },
       {
-        title: 'Podpora',
+        title: 'kromka.support',
         href: '/support',
       },
     ],
   },
-]
+];
 
 export const adminSidebarNavigation = [
   {
-    title: 'Dashboard',
+    title: 'dashboard',
     href: '/',
     icon: Grid2X2Icon,
   },
   {
-    title: 'E-Shop',
+    title: 'eshop.title',
     href: '/shop',
     icon: ShoppingBasketIcon,
     isActive: true,
     items: [
       {
-        title: 'Stores',
+        title: 'eshop.stores',
         href: '/stores',
         icon: StoreIcon,
       },
       {
-        title: 'Products',
+        title: 'eshop.products',
         href: '/products',
         icon: ShoppingBagIcon,
       },
       {
-        title: 'Orders',
+        title: 'eshop.orders',
         href: '/orders',
         icon: ClipboardListIcon,
       },
     ],
   },
   {
-    title: 'Blog',
+    title: 'blog.title',
     href: '/blog',
     icon: BookTypeIcon,
     isActive: false,
     items: [
       {
-        title: 'Posts',
+        title: 'blog.posts',
         href: '/posts',
         icon: FileTextIcon,
       },
       {
-        title: 'Comments',
+        title: 'blog.comments',
         href: '/comments',
         icon: MessageSquareQuoteIcon,
       },
     ],
   },
   {
-    title: 'Users',
+    title: 'users.title',
     href: '/users',
     icon: UsersRoundIcon,
     // isActive: false,
     // items: [
     //   {
-    //     title: 'Employees',
+    //     title: 'users.employees',
     //     href: '/employees',
     //     icon: ContactRoundIcon,
     //   },
     //   {
-    //     title: 'Customers',
+    //     title: 'users.customers',
     //     href: '/customers',
     //     icon: UserRoundSearchIcon,
     //   },
     // ],
   },
-]
+];

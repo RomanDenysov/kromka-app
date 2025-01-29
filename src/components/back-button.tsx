@@ -11,7 +11,10 @@ export const BackButton = () => {
     <Button
       type="button"
       variant="outline"
-      onClick={() => router.back()}
+      onClick={(e) => {
+        e.preventDefault();
+        router.back();
+      }}
       size="icon"
     >
       <span className="sr-only">Back</span>

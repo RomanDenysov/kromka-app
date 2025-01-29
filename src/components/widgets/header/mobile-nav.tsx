@@ -1,6 +1,7 @@
 'use client';
 
 import { ChevronRightIcon, MenuIcon, X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useState } from 'react';
 import { Button } from '~/components/ui/button';
@@ -15,6 +16,7 @@ import {
 import { mainNavigation } from '~/config/navigation';
 
 const MobileNav = () => {
+  const t = useTranslations('header.navigation');
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -31,18 +33,18 @@ const MobileNav = () => {
       </SheetTrigger>
       <SheetContent side="left">
         <SheetHeader>
-          <SheetTitle>MENU</SheetTitle>
-          <SheetDescription>TEST</SheetDescription>
+          <SheetTitle>{t('home.title')}</SheetTitle>
+          <SheetDescription>{t('home.description')}</SheetDescription>
         </SheetHeader>
         <div className="flex flex-col items-start justify-start gap-4">
           {mainNavigation.map((item) => (
             <div key={item.title} className="flex flex-col gap-3">
               {item.href ? (
                 <Link href={item.href}>
-                  <span className="text-lg">{item.title}</span>
+                  <span className="text-lg">{t(item.title)}</span>
                 </Link>
               ) : (
-                <p className="text-lg">{item.title}</p>
+                <p className="text-lg">{t(item.title)}</p>
               )}
               {item.items?.map((subItem) => (
                 <Link
@@ -50,7 +52,9 @@ const MobileNav = () => {
                   key={subItem.title}
                   className="flex items-center justify-between"
                 >
-                  <span className="text-muted-foreground">{subItem.title}</span>
+                  <span className="text-muted-foreground">
+                    {t(subItem.title)}
+                  </span>
                   <ChevronRightIcon className="size-4 stroke-1" />
                 </Link>
               ))}

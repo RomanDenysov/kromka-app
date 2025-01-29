@@ -1,139 +1,132 @@
-import { relations } from 'drizzle-orm'
-import { integer, pgTable, primaryKey, text, uniqueIndex } from 'drizzle-orm/pg-core'
-import { sortAndVisibility, timestamps } from '../helpers'
-import { categories } from './categories'
-import { inventoryStatus, measurementUnits, productStatus } from './enums'
-import { productImages } from './images'
-import { stores } from './stores'
+import { relations } from 'drizzle-orm';
+import { index, integer, pgTable, primaryKey, text } from 'drizzle-orm/pg-core';
+import { idField, sortAndVisibility, timestamps } from '../helpers';
+import { categories } from './categories';
+import { inventoryStatus, measurementUnits, productStatus } from './enums';
+import { productImages } from './images';
+import { stores } from './stores';
 
 // PRODUCTS SCHEMAS
+const products = pgTable(
+  'products',
+  {
+    ...idField,
+    name: text('name').notNull().unique(),
+    slug: text('slug').notNull().unique(),
+    description: text('description').notNull(),
 
-const products = pgTable('products', {
-  id: text('id').primaryKey(),
+    categoryId: text('category_id')
+      .notNull()
+      .references(() => categories.id, { onDelete: 'restrict' }),
 
-  name: text('name').notNull().unique(),
-  slug: text('slug').notNull().unique(),
-  description: text('description').notNull(),
+    productStatus: productStatus('product_status').notNull().default('draft'),
 
-  categoryId: text('category_id')
-    .notNull()
-    .references(() => categories.id, { onDelete: 'restrict' }),
+    unit: measurementUnits('unit').notNull(),
+    value: integer('value'),
+    price: integer('price'),
 
-  productStatus: productStatus('product_status').notNull().default('draft'),
+    ...sortAndVisibility,
 
-  ...sortAndVisibility,
+    stripeId: text('stripe_id').unique(),
+    stripePriceId: text('stripe_price_id').unique(),
 
-  stripeId: text('stripe_id').unique(),
+    ...timestamps,
+  },
+  (table) => ({
+    slugIdx: index('product_slug_idx').on(table.slug),
+  })
+);
 
-  ...timestamps,
-})
-
-const ingredients = pgTable('ingredients', {
-  name: text('name').primaryKey().notNull(),
-})
+const ingredients = pgTable(
+  'ingredients',
+  {
+    ...idField,
+    name: text('name').notNull().unique(),
+  },
+  (table) => ({
+    nameIdx: index('ingredient_name_idx').on(table.name),
+  })
+);
 
 const productIngredients = pgTable(
-  'productIngredients',
+  'product_ingredients',
   {
-    id: text('id').primaryKey(),
     productId: text('product_id')
       .notNull()
       .references(() => products.id, { onDelete: 'cascade' }),
-    ingredientName: text('ingredient_name')
+    ingredientId: text('ingredient_id')
       .notNull()
-      .references(() => ingredients.name),
+      .references(() => ingredients.id, { onDelete: 'cascade' }),
   },
   (table) => ({
-    productIngredientsIdx: uniqueIndex('product_ingredients_idx').on(
-      table.productId,
-      table.ingredientName,
-    ),
-  }),
-)
-
-// PRODUCT OPTIONS SCHEMA
-
-const productOptions = pgTable('product_options', {
-  sku: text('sku').notNull().primaryKey(),
-  productId: text('product_id')
-    .notNull()
-    .references(() => products.id, { onDelete: 'cascade' }),
-  unit: measurementUnits('unit').notNull(),
-  value: integer('value').notNull(),
-
-  price: integer('price').notNull(),
-
-  stripePriceId: text('stripe_price_id').unique(),
-
-  sortOrder: integer('sort_order').default(0),
-})
+    pk: primaryKey({ columns: [table.productId, table.ingredientId] }),
+  })
+);
 
 const inventory = pgTable(
   'inventory',
   {
+    ...idField,
     storeId: text('store_id')
       .notNull()
       .references(() => stores.id, { onDelete: 'cascade' }),
-    productOptionsSku: text('product_options_sku')
+    productId: text('product_id')
       .notNull()
-      .references(() => productOptions.sku, { onDelete: 'cascade' }),
+      .references(() => products.id, { onDelete: 'cascade' }),
 
     defaultQuantity: integer('default_quantity').notNull(),
     currentQuantity: integer('current_quantity').notNull(),
     lowStockThreshold: integer('low_stock_threshold').notNull(),
 
-    inventoryStatus: inventoryStatus('inventory_status').notNull().default('in_stock'),
+    inventoryStatus: inventoryStatus('inventory_status')
+      .notNull()
+      .default('in_stock'),
     ...timestamps,
   },
   (table) => ({
-    pk: primaryKey({ columns: [table.storeId, table.productOptionsSku] }),
-  }),
-)
+    inventoryStatusIdx: index('inventory_status_idx').on(table.inventoryStatus),
+    currentQuantityIdx: index('current_quantity_idx').on(table.currentQuantity),
+  })
+);
 
 // Relations
 const productsRelations = relations(products, ({ many, one }) => ({
-  options: many(productOptions),
   category: one(categories, {
     fields: [products.categoryId],
     references: [categories.id],
   }),
   productIngredients: many(productIngredients),
   images: many(productImages),
-}))
+}));
 
-const productIngredientsRelations = relations(productIngredients, ({ one }) => ({
-  product: one(products, {
-    fields: [productIngredients.productId],
-    references: [products.id],
-  }),
-  ingredient: one(ingredients, {
-    fields: [productIngredients.ingredientName],
-    references: [ingredients.name],
-  }),
-}))
+const productIngredientsRelations = relations(
+  productIngredients,
+  ({ one }) => ({
+    product: one(products, {
+      fields: [productIngredients.productId],
+      references: [products.id],
+    }),
+    ingredient: one(ingredients, {
+      fields: [productIngredients.ingredientId],
+      references: [ingredients.id],
+    }),
+  })
+);
 
 const ingredientsRelations = relations(ingredients, ({ many }) => ({
   productIngredients: many(productIngredients),
-}))
-
-const productOptionsRelations = relations(productOptions, ({ many, one }) => ({
-  product: one(products, {
-    fields: [productOptions.productId],
-    references: [products.id],
-  }),
-  inventory: many(inventory),
-}))
+}));
 
 const inventoryRelations = relations(inventory, ({ one }) => ({
   store: one(stores, {
     fields: [inventory.storeId],
     references: [stores.id],
   }),
-  option: one(productOptions, {
-    fields: [inventory.productOptionsSku],
-    references: [productOptions.sku],
+  product: one(products, {
+    fields: [inventory.productId],
+    references: [products.id],
   }),
-}))
+}));
 
 export {
   ingredients,
@@ -142,8 +135,6 @@ export {
   inventoryRelations,
   productIngredients,
   productIngredientsRelations,
-  productOptions,
-  productOptionsRelations,
   products,
   productsRelations,
-}
+};

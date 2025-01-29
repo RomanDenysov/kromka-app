@@ -1,7 +1,14 @@
-import { relations } from 'drizzle-orm'
-import { boolean, index, pgTable, text, timestamp, uniqueIndex } from 'drizzle-orm/pg-core'
-import { timestamps } from '../helpers'
-import { staffRole } from './enums'
+import { relations } from 'drizzle-orm';
+import {
+  boolean,
+  index,
+  pgTable,
+  text,
+  timestamp,
+  uniqueIndex,
+} from 'drizzle-orm/pg-core';
+import { idField, timestamps } from '../helpers';
+import { staffRole } from './enums';
 
 const users = pgTable('users', {
   id: text('id').primaryKey(),
@@ -11,7 +18,7 @@ const users = pgTable('users', {
   image: text('image'),
   isAnonymous: boolean('is_anonymous'),
   ...timestamps,
-})
+});
 
 const session = pgTable('session', {
   id: text('id').primaryKey(),
@@ -23,7 +30,7 @@ const session = pgTable('session', {
     .notNull()
     .references(() => users.id),
   ...timestamps,
-})
+});
 
 const account = pgTable('account', {
   id: text('id').primaryKey(),
@@ -40,7 +47,7 @@ const account = pgTable('account', {
   scope: text('scope'),
   password: text('password'),
   ...timestamps,
-})
+});
 
 const verification = pgTable('verification', {
   id: text('id').primaryKey(),
@@ -49,12 +56,12 @@ const verification = pgTable('verification', {
   expiresAt: timestamp('expires_at').notNull(),
   createdAt: timestamp('created_at'),
   updatedAt: timestamp('updated_at'),
-})
+});
 
 const staff = pgTable(
   'staff',
   {
-    id: text('id').primaryKey(),
+    ...idField,
     userId: text('user_id')
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' })
@@ -69,14 +76,17 @@ const staff = pgTable(
     // Уникальный индекс для userId, так как у нас unique constraint
     userIdUnique: uniqueIndex('staff_user_id_unique').on(table.userId),
     // Составной индекс для частых запросов по userId + isActive
-    userActiveIdx: index('staff_user_active_idx').on(table.userId, table.isActive),
-  }),
-)
+    userActiveIdx: index('staff_user_active_idx').on(
+      table.userId,
+      table.isActive
+    ),
+  })
+);
 
 const staffRelations = relations(staff, ({ one }) => ({
   user: one(users, {
     fields: [staff.userId],
     references: [users.id],
   }),
-}))
-export { account, session, staff, staffRelations, users, verification }
+}));
+export { account, session, staff, staffRelations, users, verification };

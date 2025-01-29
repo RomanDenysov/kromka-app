@@ -1,46 +1,33 @@
-import { betterFetch } from '@better-fetch/fetch'
-import { type NextRequest, NextResponse } from 'next/server'
-import type { Session } from './server/auth/auth'
+import { betterFetch } from '@better-fetch/fetch';
+import { type NextRequest, NextResponse } from 'next/server';
+import type { Session } from './server/auth/auth';
 
 // const authRoutes = ['/sign-in', '/login']
-const adminRoutes = ['/admin/', '/admin']
+const ADMIN_PATTERN = /^\/admin(?:\/.*)?$/;
 
 export default async function authMiddleware(request: NextRequest) {
-  const { pathname } = request.nextUrl
-  // const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route))
-  const isAdminRoute = adminRoutes.some((route) => pathname.startsWith(route))
+  const { pathname } = request.nextUrl;
 
-  const { data: session } = await betterFetch<Session>('/api/auth/get-session', {
-    baseURL: request.nextUrl.origin,
-    headers: {
-      //get the cookie from the request
-      cookie: request.headers.get('cookie') || '',
-    },
-  })
-
-  if (!session) {
-    // if (isAuthRoute) {
-    return NextResponse.next()
-    // }
-    // return NextResponse.redirect(new URL('/sign-in', request.url))
+  if (pathname.startsWith('/api/auth')) {
+    return NextResponse.next();
   }
 
-  // if (isAuthRoute) {
-  //   return NextResponse.redirect(new URL('/', request.url))
-  // }
+  const isAdminRoute = ADMIN_PATTERN.test(pathname);
+  const { data: session } = await betterFetch<Session>(
+    '/api/auth/get-session',
+    {
+      baseURL: request.nextUrl.origin,
+      headers: {
+        //get the cookie from the request
+        cookie: request.headers.get('cookie') || '',
+      },
+    }
+  );
 
-  if (isAdminRoute) {
-    return NextResponse.redirect(new URL('/', request.url))
+  if (isAdminRoute && !session) {
+    return NextResponse.redirect(new URL('/', request.url));
   }
-
-  // If you want to allow all users (including guests), comment the following line and uncomment the next line
-  // if (request.nextUrl.pathname === '/') {
-  //   return request
-  // }
-
-  // If you want to allow all users (including guests), comment the following line and uncomment the previous line
-  // return NextResponse.redirect(new URL('/sign-in', request.url))
-  return NextResponse.next()
+  return NextResponse.next();
 }
 
 export const config = {
@@ -50,5 +37,6 @@ export const config = {
     '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
     // Always run for API routes
     '/(api|trpc)(.*)',
+    '/admin/:path*',
   ],
-}
+};

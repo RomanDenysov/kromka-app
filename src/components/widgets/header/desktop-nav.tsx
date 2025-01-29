@@ -1,4 +1,5 @@
 import { ChevronRightIcon } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { Button } from '~/components/ui/button';
 
 import {
@@ -12,6 +13,7 @@ import {
 import { mainNavigation } from '~/config/navigation';
 
 const DesktopNav = () => {
+  const t = useTranslations('header.navigation');
   return (
     <div className="hidden flex-row items-center justify-start lg:flex">
       <NavigationMenu className="flex items-start justify-start">
@@ -21,25 +23,25 @@ const DesktopNav = () => {
               {item.href ? (
                 <>
                   <NavigationMenuLink href={item.href}>
-                    <Button variant="ghost">{item.title}</Button>
+                    <Button variant="ghost">{t(item.title)}</Button>
                   </NavigationMenuLink>
                 </>
               ) : (
                 <>
                   <NavigationMenuTrigger className="font-medium text-sm">
-                    {item.title}
+                    {t(item.title)}
                   </NavigationMenuTrigger>
                   <NavigationMenuContent className="!w-[450px] p-4">
                     <div className="flex grid-cols-2 flex-col gap-2 lg:grid">
                       <div className="flex h-full flex-col justify-between">
                         <div className="flex flex-col">
-                          <p className="text-base">{item.title}</p>
+                          <p className="text-base">{t(item.title)}</p>
                           <p className="text-muted-foreground text-sm">
-                            {item.description}
+                            {t(item.description)}
                           </p>
                         </div>
                         <Button className="mt-10" size="sm">
-                          Test button
+                          test
                         </Button>
                       </div>
                       <div className="flex h-full flex-col justify-end space-y-1 text-sm">
@@ -49,7 +51,7 @@ const DesktopNav = () => {
                             key={subItem.title}
                             className="flex h-8 flex-row items-center justify-between rounded-md px-4 py-2 text-xs hover:bg-muted"
                           >
-                            <span>{subItem.title}</span>
+                            <span>{t(subItem.title)}</span>
                             <ChevronRightIcon className="size-4 text-muted-foreground" />
                           </NavigationMenuLink>
                         ))}

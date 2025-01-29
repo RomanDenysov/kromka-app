@@ -1,10 +1,10 @@
-'use client'
+'use client';
 
-import type { ColumnDef } from '@tanstack/react-table'
-import Image from 'next/image'
-import { Checkbox } from '~/components/ui/checkbox'
-import type { Product } from '~/server/api/routers/products/types'
-import { Actions } from './actions'
+import type { ColumnDef } from '@tanstack/react-table';
+import Image from 'next/image';
+import { Checkbox } from '~/components/ui/checkbox';
+import type { Product } from '~/server/api/routers/products/schemas';
+import { Actions } from './actions';
 
 export const columns: ColumnDef<Product>[] = [
   {
@@ -12,7 +12,8 @@ export const columns: ColumnDef<Product>[] = [
     header: ({ table }) => (
       <Checkbox
         checked={
-          table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && 'indeterminate')
         }
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Select all"
@@ -30,7 +31,7 @@ export const columns: ColumnDef<Product>[] = [
     accessorKey: 'image',
     header: 'Image',
     cell: ({ cell }) => {
-      const image = cell.getValue() as string
+      const image = cell.getValue() as string;
       return (
         <div className="relative aspect-square size-16 rounded ring-1 ring-primary-foreground">
           <Image
@@ -40,7 +41,7 @@ export const columns: ColumnDef<Product>[] = [
             fill
           />
         </div>
-      )
+      );
     },
   },
   {
@@ -67,11 +68,11 @@ export const columns: ColumnDef<Product>[] = [
     accessorKey: 'isVisible',
     header: 'Visibile',
     cell: ({ row }) => {
-      return row.getValue('isVisible') ? 'Yes' : 'No'
+      return row.getValue('isVisible') ? 'Yes' : 'No';
     },
   },
   {
     id: 'actions',
     cell: ({ row }) => <Actions id={row.original.id} />,
   },
-]
+];

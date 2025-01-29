@@ -1,29 +1,11 @@
-// import 'server-only'
+import { render } from '@react-email/components';
+import type { SentMessageInfo } from 'nodemailer';
+import { env } from '~/env';
+import { log } from '../utils/log';
+import { type EmailArgs, transporter } from './config';
+import { MagicLinkEmail } from './templates/magic-link';
 
-import nodemailer, { type SentMessageInfo } from 'nodemailer'
-import { env } from '~/env'
-import { log } from '../utils/log'
-
-const host = env.EMAIL_HOST
-const username = env.EMAIL_USERNAME
-const password = env.EMAIL_PASSWORD
-const port = 587
-
-const transporter = nodemailer.createTransport({
-  host,
-  port,
-  secure: false,
-  auth: {
-    user: username,
-    pass: password,
-  },
-})
-
-interface EmailArgs {
-  to: string
-  subject: string
-  text: string
-}
+const authMailSender = env.EMAIL_USERNAME;
 
 export async function sendEmail({
   email,
@@ -31,34 +13,47 @@ export async function sendEmail({
   subject,
   text,
   html,
-}: {
-  email: string
-  sendTo?: string
-  subject: string
-  text: string
-  html?: string
-}): Promise<SentMessageInfo> {
+}: EmailArgs): Promise<SentMessageInfo | undefined> {
   try {
-    const isVerified = await transporter.verify()
+    const isVerified = await transporter.verify();
     if (!isVerified) {
-      console.error('Email is not verified')
-      return
+      log.error('Email is not verified');
+      return;
     }
 
     const mailOptions = {
-      from: email,
+      from: authMailSender,
       to: sendTo,
       subject,
       text,
       html: html ? html : '',
-    }
+    };
 
-    const info = await transporter.sendMail(mailOptions)
-    log.info('Message sent: %s', info.messageId)
+    const info = await transporter.sendMail(mailOptions);
+    log.info('Message sent: %s', info.messageId);
 
-    return info
+    return info;
   } catch (error) {
-    console.error('Something Went Wrong', username, password, error)
-    return
+    log.error('Something Went Wrong', error);
+    return;
+  }
+}
+
+export async function sendMagicLinkEmail(email: string, url: string) {
+  // Render email template to HTML
+  const emailHtml = await render(MagicLinkEmail({ url }));
+
+  const mailOptions = {
+    from: authMailSender,
+    to: email,
+    subject: 'Sign in to your account',
+    html: emailHtml,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+  } catch (error) {
+    log.error('Failed to send email:', error);
+    throw new Error('Failed to send email');
   }
 }

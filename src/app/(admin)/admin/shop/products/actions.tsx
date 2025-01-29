@@ -1,21 +1,21 @@
-'use client'
+'use client';
 
-import { EditIcon, MoreHorizontalIcon, TrashIcon } from 'lucide-react'
-import Link from 'next/link'
-import { Button } from '~/components/ui/button'
+import { EditIcon, MoreHorizontalIcon, TrashIcon } from 'lucide-react';
+import Link from 'next/link';
+import { Button } from '~/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '~/components/ui/dropdown-menu'
-import { log } from '~/lib/utils/log'
+} from '~/components/ui/dropdown-menu';
+import { log } from '~/lib/utils/log';
 
 export const Actions = ({ id }: { id: string }) => {
   const handleDelete = async () => {
-    log.info('Delete product')
-  }
-  const isPending = false
+    await log.info('Delete product');
+  };
+  const isPending = false;
 
   return (
     <DropdownMenu>
@@ -37,5 +37,5 @@ export const Actions = ({ id }: { id: string }) => {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
-}
+  );
+};

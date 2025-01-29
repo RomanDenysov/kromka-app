@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm';
 import { createTRPCRouter, publicProcedure } from '~/server/api/trpc';
-import { staff } from '~/server/db/schema';
+import { staff } from '~/server/db/schema/users';
 
 export const userRouter = createTRPCRouter({
   getUser: publicProcedure.query(({ ctx }) => {

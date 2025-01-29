@@ -43,11 +43,12 @@ const UserButton = async () => {
     api.users.getUser(),
     api.users.checkAccess(),
   ]);
-  if (!user) {
+  if (!user || user.isAnonymous) {
     return null;
   }
 
-  log.info('USER, user-button', user);
+  log.info('USER', user);
+  log.info('hasAccess', hasAccess);
 
   return (
     <DropdownMenu>
@@ -71,7 +72,7 @@ const UserButton = async () => {
                 </Link>
               </DropdownMenuItem>
             ))}
-            {hasAccess && (
+            {hasAccess.success && (
               <>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>

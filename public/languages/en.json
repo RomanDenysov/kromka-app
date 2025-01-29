@@ -1,3 +1,100 @@
 {
-  "home": {}
+  "header": {
+    "navigation": {
+      "home": {
+        "title": "Home",
+        "description": "Home"
+      },
+      "eshop": {
+        "title": "Eshop",
+        "description": "Eshop",
+        "stores": "Stores",
+        "products": "Products"
+      },
+      "kromka": {
+        "title": "Kromka",
+        "description": "Kromka",
+        "about": "About",
+        "contact": "Contact",
+        "support": "Support"
+      }
+    },
+    "signIn": "Sign In",
+    "signUp": "Sign Up"
+  },
+  "homepage": {
+    "hero": {
+      "title": "S láskou ku kvásku",
+      "description": "V Kromke to vonia čerstvým kváskovým chebom, koláčmi a kávou, a teraz sme aj online! Vitajte na našom eshope, veríme, že si nájdete lakocinky podľa svojej chuti."
+    },
+    "features": {
+      "title": "ČO PONÚKAME?",
+      "description": "Naše životné heslo znie jasne: Chleba, lakocinky & káva! Presne to nájdete aj na našom eshope. Chrumkavý kváskový chlebík, sladké aj slané lakocinky a dobrú kávu. Pre rýchlejší prístup k našim lakocinkám si vytvorte svoje Kromka-konto.",
+      "feature1": {
+        "title": "E-SHOP",
+        "description": "Máte chuť na nejakú lakocinku, kváskový chlebík alebo kávu? Kromka je už aj online! Vyberte si, čo potrebujete, a svoj nákup si potom jednoducho vyzdvihnite vo vami zvolenej predajni v Prešove alebo v Košiciach."
+      },
+      "feature2": {
+        "title": "BLOG",
+        "description": "My v Kromke máme jedlo naozaj radi. A tak o tom aj píšeme, zbierame recepty a rozprávame sa s ľuďmi z fachu. Urobte si kávu, posaďte sa a prečítajte si niečo z nášho blogu."
+      },
+      "feature3": {
+        "title": "B2B RIEŠENIA",
+        "description": "Máte svoju vlastnú gastro prevádzku, pečiete burgre alebo robíte kávu? Ak hľadáte niekoho, kto vám upečie kváskový chlebík, sledké i slané koláče a sprostredkuje ďalšie lakocinky, ozvite sa, radi sa s vami dohodneme."
+      },
+      "feature4": {
+        "title": "SPOLUPRÁCA",
+        "description": "Radi sa spájame s tými, ktorí majú na jedlo podobný pohľad ako my. Ak by ste svoje výrobky chceli ponúkať aj u nás v Kromke, napíšte nám, radi s vami budeme spolupracovať."
+      }
+    }
+  },
+
+  "search": {
+    "placeholder": "Search products and posts",
+    "callToAction": "Type to search...",
+    "empty": "No results found.",
+    "products": "Products",
+    "posts": "Posts"
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "signInTo": "Sign In to your account",
+    "signUp": "Sign Up",
+    "signUpTo": "Sign Up to your account",
+    "signInWith": "Sign In with",
+    "signOut": "Sign Out",
+    "or": "or"
+  },
+  "common": {
+    "send": "Send"
+  },
+
+  "admin": {
+    "sidebar": {
+      "dashboard": "Dashboard",
+      "eshop": {
+        "title": "Eshop",
+        "stores": "Stores",
+        "products": "Products",
+        "orders": "Orders"
+      },
+      "blog": {
+        "title": "Blog",
+        "posts": "Posts",
+        "comments": "Comments"
+      },
+      "users": {
+        "title": "Users",
+        "employees": "Employees",
+        "customers": "Customers"
+      }
+    },
+    "shop": {
+      "products": {
+        "title": "Products",
+        "new": "New product",
+        "empty": "No products"
+      }
+    }
+  }
 }
